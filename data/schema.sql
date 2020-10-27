@@ -33,7 +33,7 @@ values (
         sha2('samuel', 256),
         0,
         1,
-        current_timestamp()
+        current_timestamp
 );
 
 drop table if exists `post`;
@@ -47,10 +47,44 @@ create table `post` (
     foreign key (user_id) references user(id)
 );
 
-insert into `post` (user_id, text, created_at, is_approved)
+# Post ID 1
+insert into `post` (user_id, title, text, created_at, is_approved)
 values (
     1,
-    ''
+    'Aus was entsteht Luft?',
+    'Trockene Luft besteht hauptsächlich aus den zwei Gasen Stickstoff (rund 78,08 Vol. -%) und Sauerstoff (rund 20,95 Vol. ... Daneben gibt es noch die Komponenten Argon (0,93 Vol. -%), Kohlenstoffdioxid (0,04 Vol.',
+    current_timestamp,
+    1
+);
+
+# Post ID 2
+insert into `post` (user_id, title, text, created_at, is_approved)
+values (
+   2,
+   'Aus welchem Material ist eine Holzeisenbahn?',
+   'Holzeisenbahnen. Unter dem Begriff Holzeisenbahn werden die Spielzeugeisenbahnen verstanden, bei denen außer den Fahrzeugen auch die Schienen und das Zubehör aus Holz bestehen.',
+   current_timestamp,
+   1
+);
+
+# Post ID 3
+insert into `post` (user_id, title, text, created_at, is_approved)
+values (
+   1,
+   'Existieren wir wirklich?',
+   'Bisher ist nicht wirklich von der Hand zu weisen, dass die Welt um uns herum gar nicht real ist. Vielleicht sind wir ja nur Figuren in einem realistisch programmierten Computerspiel? Diese Forscher können dich beruhigen. Glauben sie zumindest.',
+   current_timestamp,
+   1
+);
+
+# Post ID 4
+insert into `post` (user_id, title, text, created_at, is_approved)
+values (
+   2,
+   'Für was sind Gefühle?',
+   'Gefühl ist ein psychologischer Terminus, der als Oberbegriff für unterschiedlichste psychische Erfahrungen und Reaktionen dient wie u. a. Angst, Ärger, Komik, Ironie sowie Mitleid, Eifersucht, Furcht, Freude und Liebe die sich (potenziell) beschreiben und damit auch versprachlichen lassen.',
+   current_timestamp,
+   1
 );
 
 
