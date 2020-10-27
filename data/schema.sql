@@ -1,7 +1,7 @@
 ﻿drop table if exists `user`;
 create table `user`
 (
-    id          integer      not null auto_increment,
+    id          integer unsigned not null auto_increment,
     username    varchar(64)  not null,
     first_name  varchar(64)  not null,
     last_name   varchar(64)  not null,
@@ -33,11 +33,11 @@ values ('swicky',
         1,
         current_timestamp);
 
-drop table if exists post;
-create table post
+drop table if exists `post`;
+create table `post`
 (
     id          integer unsigned not null auto_increment,
-    user_id     integer          not null,
+    user_id     integer unsigned not null,
     title       varchar(255),
     text        text,
     created_at  datetime         not null default current_timestamp,
@@ -77,3 +77,31 @@ values (2,
         'Gefühl ist ein psychologischer Terminus, der als Oberbegriff für unterschiedlichste psychische Erfahrungen und Reaktionen dient wie u. a. Angst, Ärger, Komik, Ironie sowie Mitleid, Eifersucht, Furcht, Freude und Liebe die sich (potenziell) beschreiben und damit auch versprachlichen lassen.',
         current_timestamp,
         1);
+
+drop table if exists `comment`;
+create table  `comment`
+(
+    id          integer unsigned not null auto_increment,
+    user_id     integer unsigned not null,
+    text        text,
+    created_at  datetime         not null default current_timestamp,
+    is_approved boolean,
+    post_id integer unsigned not null,
+    primary key (id),
+    foreign key (user_id) references user (id),
+    foreign key (post_id) references post (id)
+);
+
+drop table if exists `reply`;
+create table `reply`
+(
+    id          integer unsigned not null auto_increment,
+    user_id     integer unsigned not null,
+    text        text,
+    created_at  datetime         not null default current_timestamp,
+    is_approved boolean,
+    comment_id integer unsigned not null,
+    primary key (id),
+    foreign key (user_id) references user (id),
+    foreign key (comment_id) references comment (id)
+);
