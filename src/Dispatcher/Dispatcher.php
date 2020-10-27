@@ -30,9 +30,6 @@ class Dispatcher
      */
     public static function dispatch()
     {
-		echo "Die Methode dispatch im Dispatcher wurde aufgerufen";
-		
-		/*
         $controllerName = UriParser::getControllerName().'Controller';
         $className = 'App\\Controller\\'.$controllerName;
         $methodName = UriParser::getMethodName();
@@ -41,6 +38,5 @@ class Dispatcher
         // Methode darauf aufgerufen.
         $controller = new $className();
         $controller->$methodName();
-		*/
     }
 }
