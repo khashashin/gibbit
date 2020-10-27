@@ -92,6 +92,23 @@ create table  `comment`
     foreign key (post_id) references post (id)
 );
 
+# Comment ID 1
+insert into comment (user_id, text, created_at, is_approved, post_id)
+values (2,
+        'Wir können nicht mehr als wahrnehmen, das wir wahrnehmen?',
+        current_timestamp,
+        1,
+        1);
+
+
+# Comment ID 2
+insert into comment (user_id, text, created_at, is_approved, post_id)
+values (2,
+        'Luft besteht aus Luft, was denn sonst?',
+        current_timestamp,
+        1,
+        2);
+
 drop table if exists `reply`;
 create table `reply`
 (
