@@ -24,13 +24,13 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto w-50">
-                <li class="nav-item active w-25 text-center">
+                <li class="nav-item <?php echo (\App\Dispatcher\UriParser::getControllerName() === 'Default') ? 'active' : ''; ?> w-25 text-center"> <!-- Gives class 'active' when selected -->
                     <a class="nav-link" href="/">Home</a>
                 </li>
-                <li class="nav-item w-25 text-center">
+                <li class="nav-item <?php echo (\App\Dispatcher\UriParser::getControllerName() === 'Post') ? 'active' : ''; ?> w-25 text-center"> <!-- Gives class 'active' when selected -->
                     <a class="nav-link" href="/post">Posts</a>
                 </li>
-                <li class="nav-item w-25 text-center">
+                <li class="nav-item <?php echo (\App\Dispatcher\UriParser::getControllerName() === 'About') ? 'active' : ''; ?> w-25 text-center"> <!-- Gives class 'active' when selected -->
                     <a class="nav-link" href="/about">Über Uns</a>
                 </li>
                 <li class="nav-item w-25 text-center">
