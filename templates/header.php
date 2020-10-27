@@ -34,7 +34,7 @@
                     <a class="nav-link" href="/about">Über Uns</a>
                 </li>
                 <li class="nav-item w-25 text-center">
-                    <a class="nav-link" href="/user"><i class="fa fa-lg fa-user"></i></a>
+                    <a class="nav-link" href="#"><i class="fa fa-lg fa-user"></i></a>
                 </li>
             </ul>
         </div>
