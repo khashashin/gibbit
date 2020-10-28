@@ -24,17 +24,29 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto w-50">
-                <li class="nav-item <?php echo (\App\Dispatcher\UriParser::getControllerName() === 'Default') ? 'active' : ''; ?> w-25 text-center"> <!-- Gives class 'active' when selected -->
+                <li class="nav-item <?php echo (\App\Dispatcher\UriParser::getControllerName() === 'Default') ? 'active' : ''; ?> w-25 text-center">
+                    <!-- Gives class 'active' when selected -->
                     <a class="nav-link" href="/">Home</a>
                 </li>
-                <li class="nav-item <?php echo (\App\Dispatcher\UriParser::getControllerName() === 'Post') ? 'active' : ''; ?> w-25 text-center"> <!-- Gives class 'active' when selected -->
+                <li class="nav-item <?php echo (\App\Dispatcher\UriParser::getControllerName() === 'Post') ? 'active' : ''; ?> w-25 text-center">
+                    <!-- Gives class 'active' when selected -->
                     <a class="nav-link" href="/post">Posts</a>
                 </li>
-                <li class="nav-item <?php echo (\App\Dispatcher\UriParser::getControllerName() === 'About') ? 'active' : ''; ?> w-25 text-center"> <!-- Gives class 'active' when selected -->
+                <li class="nav-item <?php echo (\App\Dispatcher\UriParser::getControllerName() === 'About') ? 'active' : ''; ?> w-25 text-center">
+                    <!-- Gives class 'active' when selected -->
                     <a class="nav-link" href="/about">Über Uns</a>
                 </li>
                 <li class="nav-item w-25 text-center">
-                    <a class="nav-link" href="#"><i class="fa fa-lg fa-user"></i></a>
+                    <div class="dropdown show">
+                        <a class="nav-link" href="#" role="button" id="userManagementMenuLink" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-lg fa-user"></i>&nbsp;<i class="fa fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="userManagementMenuLink">
+                            <a class="dropdown-item" href="#">Username goes here</a>
+                            <a class="dropdown-item" href="/user/logout">Logout</a>
+                        </div>
+                    </div>
                 </li>
             </ul>
         </div>
