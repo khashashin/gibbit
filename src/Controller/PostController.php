@@ -5,6 +5,7 @@ namespace App\Controller;
 
 
 use App\Repository\PostRepository;
+use App\Repository\UserRepository;
 use App\View\View;
 
 class PostController
@@ -17,7 +18,7 @@ class PostController
         $view = new View('post/index');
         $view->title = 'Posts';
         $view->heading = 'Posts';
-        $view->posts = $this->postRepository->readAll();
+        $view->posts = $this->postRepository->readAll($max=10);
         $view->display();
     }
 
