@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 
+use App\CommentRepository\CommentRepository;
 use App\Repository\PostRepository;
 use App\View\View;
 
@@ -11,6 +12,7 @@ class PostController
 {
     public function __construct() {
         $this->postRepository = new PostRepository();
+        $this->commentRepository = new CommentRepository();
     }
 
     public function index() {
@@ -24,13 +26,23 @@ class PostController
 
     public function details() {
 
-        $post = $this->postRepository->readById($_GET['id']);
 
-        $view = new View('post/details');
-        $view->title = $post->title;
-        $view->heading = $post->title;
-        $view->post = $post;
-        $view->display();
+        session_start();
+        if(isset($_SESSION['isLoggedIn']))
+        {
 
+            $post = $this->postRepository->readById($_GET['id']);
+
+
+            $view = new View('post/details');
+            $view->title = $post->title;
+            $view->heading = $post->title;
+            $view->post = $post;
+            $view->display();
+        }
+        else
+        {
+            echo "Permission denied";
+        }
     }
 }
