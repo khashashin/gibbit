@@ -75,3 +75,44 @@ footer .container {
   align-self: center;
   margin: 0;
 }
+
+/* ERROR (LOGIN + REGISTRATION) */
+.error {
+  width: 50%;
+  background-color: #FF3333;
+  padding: 15px;
+  margin-bottom: 30px;
+}
+
+.error h2 {
+  font-size: 18px;
+}
+
+/* LOGIN */
+.login h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form label, .login-form input, .login-form button {
+  width: 50%;
+}
+
+.login-form input {
+  margin-bottom: 20px;
+}
+
+.login-form button {
+  height: 40px;
+}
+
+/* REGISTRATION */
+.register h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
