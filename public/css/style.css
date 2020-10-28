@@ -55,9 +55,14 @@ body > .container {
 }
 
 /* FOOTER */
+footer .container {
+  height: 100%;
+}
+
 .footer-content {
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
   height: 100%;
 }
 
@@ -66,14 +71,7 @@ body > .container {
   align-self: center;
 }
 
-.footer-links {
-  list-style: none;
-}
-
-.footer-links li {
-  height: 20px;
-}
-
-.footer-links .fa {
-  padding-right: 10px;
+.footer-content a, .footer-content p {
+  align-self: center;
+  margin: 0;
 }
