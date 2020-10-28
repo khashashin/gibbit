@@ -47,9 +47,11 @@
                         <div class="dropdown-menu" aria-labelledby="userManagementMenuLink">
                             <?php if(isset($_SESSION['isLoggedIn'])): ?>
                             <a class="dropdown-item" href="#"><?= $_SESSION['username']; ?></a>
+                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="/user/logout">Logout</a>
                             <?php else: ?>
                             <a class="dropdown-item" href="/user/index">Einloggen</a>
+                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="/user/create">Registrieren</a>
                             <?php endif; ?>
                         </div>
