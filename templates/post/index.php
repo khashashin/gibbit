@@ -6,7 +6,7 @@
     <?php else: ?>
         <?php foreach ($posts as $post): ?>
             <ul>
-                <li><a href=""></a><?= $post->title; ?></li>
+                <li><a href="/post/details?id=<?= $post->id?>"><?= $post->title; ?></a></li>
             </ul>
         <?php endforeach; ?>
     <?php endif; ?>
