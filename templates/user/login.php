@@ -1,21 +1,22 @@
-<article class="hreview open special">
+<article class="hreview open special login">
 
     <!-- Falls vorhanden: Fehler anzeigen -->
     <?php if(isset($_GET['error'])):  ?>
     <div class="error">
-        <p>Fehler:</p>
-        <?= $_GET['error'] ?>
+        <h2>Fehler:</h2>
+        <p><?= $_GET['error'] ?></p>
     </div>
     <?php endif; ?>
 
     <!-- Login Formular -->
-	<form action="/user/doLogin" method="post">
-        <input type="text" name="username" required>
+    <h1>Bei gibbit anmelden</h1>
+	<form action="/user/doLogin" class="login-form" method="post">
         <label for="username">Benutzername</label>
-        <input type="password" name="password" required>
+        <input type="text" class="form-control" name="username" required>
         <label for="password">Passwort</label>
+        <input type="password" class="form-control" name="password" required>
 
-        <button type="submit">Anmelden</button>
+        <button type="submit" class="btn btn-primary">Anmelden</button>
     </form>
 
 </article>
