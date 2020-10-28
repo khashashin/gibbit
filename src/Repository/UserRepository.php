@@ -44,7 +44,11 @@ class UserRepository extends Repository
         // Eingabe validieren
         if(isset($username) && isset($first_name) && isset($last_name) && isset($email)) {
             if(!empty($username) && !empty($first_name) && !empty($last_name) && !isset($email)) {
-
+                // Verhindert XSS
+                htmlspecialchars($username);
+                htmlspecialchars($first_name);
+                htmlspecialchars($last_name);
+                htmlspecialchars($email);
             } else {
                 header('/user/create?error=Bitte lasse keine Eingabe leer'); // Mit Fehler returnen, dass Werte leer waren
             }
