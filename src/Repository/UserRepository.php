@@ -24,21 +24,21 @@ class UserRepository extends Repository
      * Das Passwort wird vor dem ausführen des Queries noch mit dem SHA1
      *  Algorythmus gehashed.
      *
-     * @param $firstName Wert für die Spalte firstName
-     * @param $lastName Wert für die Spalte lastName
+     * @param $first_name Wert für die Spalte firstName
+     * @param $last_name Wert für die Spalte lastName
      * @param $email Wert für die Spalte email
      * @param $password Wert für die Spalte password
      *
      * @throws Exception falls das Ausführen des Statements fehlschlägt
      */
-    public function create($firstName, $lastName, $email, $password)
+    public function create($first_name, $last_name, $email, $password)
     {
         $password = sha1($password);
 
-        $query = "INSERT INTO $this->tableName (firstName, lastName, email, password) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO $this->tableName ($first_name, $last_name, email, password) VALUES (?, ?, ?, ?)";
 
         $statement = ConnectionHandler::getConnection()->prepare($query);
-        $statement->bind_param('ssss', $firstName, $lastName, $email, $password);
+        $statement->bind_param('ssss', $first_name, $last_name, $email, $password);
 
         if (!$statement->execute()) {
             throw new Exception($statement->error);

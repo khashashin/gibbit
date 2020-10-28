@@ -32,13 +32,13 @@ class UserController
     public function doCreate()
     {
         if (isset($_POST['send'])) {
-            $firstName = $_POST['fname'];
-            $lastName = $_POST['lname'];
+            $first_name = $_POST['fname'];
+            $last_name = $_POST['lname'];
             $email = $_POST['email'];
             $password = $_POST['password'];
 
             $userRepository = new UserRepository();
-            $userRepository->create($firstName, $lastName, $email, $password);
+            $userRepository->create($first_name, $last_name, $email, $password);
         }
 
         // Anfrage an die URI /user weiterleiten (HTTP 302)
