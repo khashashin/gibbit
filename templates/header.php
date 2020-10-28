@@ -15,6 +15,8 @@
 </head>
 <body>
 
+<?php session_start(); ?>
+
 <header>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <a class="navbar-brand" href="/">gibbit</a>
@@ -43,8 +45,13 @@
                             <i class="fa fa-lg fa-user"></i>&nbsp;<i class="fa fa-chevron-down"></i>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="userManagementMenuLink">
-                            <a class="dropdown-item" href="#">Username goes here</a>
+                            <?php if(isset($_SESSION['isLoggedIn'])): ?>
+                            <a class="dropdown-item" href="#"><?= $_SESSION['username']; ?></a>
                             <a class="dropdown-item" href="/user/logout">Logout</a>
+                            <?php else: ?>
+                            <a class="dropdown-item" href="/user/index">Einloggen</a>
+                            <a class="dropdown-item" href="/user/create">Registrieren</a>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </li>
