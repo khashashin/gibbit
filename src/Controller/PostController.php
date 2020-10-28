@@ -33,17 +33,21 @@ class PostController
     }
 
     public function create() {
-        $view = new View('post/create');
-        $view->title = 'Post erstellen';
-        $view->heading = 'Post erstellen';
-        $view->display();
+        session_start();
+        if (!isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
+            $view = new View('post/create');
+            $view->title = 'Post erstellen';
+            $view->heading = 'Post erstellen';
+            $view->display();
+        } else {
+            header('Location: /user/index?error=Du bist nicht eingeloggt!');
+        }
     }
 
     public function doCreate() {
         if (isset($_POST)) {
             $title = $_POST['title'];
             $text = $_POST['text'];
-
             $this->postRepository->create($title, $text);
         }
     }
