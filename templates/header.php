@@ -43,7 +43,7 @@
                             <i class="fa fa-lg fa-user"></i>&nbsp;<i class="fa fa-chevron-down"></i>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="userManagementMenuLink">
-                            <a class="dropdown-item" href="#">Username goes here</a>
+                            <a class="dropdown-item" href="#:>Username goes here</a>
                             <a class="dropdown-item" href="/user/logout">Logout</a>
                         </div>
                     </div>
