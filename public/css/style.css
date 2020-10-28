@@ -135,3 +135,23 @@ footer .container {
 .about-us .card {
   padding: 20px;
 }
+
+/* POST */
+.post {
+  background-color: #E0E0E0;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid black;
+}
+
+.post-title-link {
+  color: black;
+}
+
+.post p {
+  margin-bottom: 5px;
+}
+
+.post .author, .post .created_at {
+  text-align: right;
+}
