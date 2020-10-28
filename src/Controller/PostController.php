@@ -14,7 +14,6 @@ class PostController
     }
 
     public function index() {
-
         $view = new View('post/index');
         $view->title = 'Posts';
         $view->heading = 'Posts';
@@ -23,7 +22,6 @@ class PostController
     }
 
     public function details() {
-
         $post = $this->postRepository->readById($_GET['id']);
 
         $view = new View('post/details');
@@ -31,6 +29,21 @@ class PostController
         $view->heading = $post->title;
         $view->post = $post;
         $view->display();
+    }
 
+    public function create() {
+        $view = new View('post/create');
+        $view->title = 'Post erstellen';
+        $view->heading = 'Post erstellen';
+        $view->display();
+    }
+
+    public function doCreate() {
+        if (isset($_POST)) {
+            $title = $_POST['title'];
+            $text = $_POST['text'];
+
+            $this->postRepository->create($title, $text);
+        }
     }
 }
