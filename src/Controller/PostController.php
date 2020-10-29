@@ -7,12 +7,26 @@ namespace App\Controller;
 use App\Repository\PostRepository;
 use App\View\View;
 
+/**
+ * Siehe Dokumentation im DefaultController.
+ */
 class PostController
 {
+    /**
+     * Initialisiere die notwendige Werte
+     */
     public function __construct() {
         $this->postRepository = new PostRepository();
     }
 
+    public function phpinfo() {
+        $view = new View('post/phpinfo');
+        $view->display();
+    }
+
+    /**
+     * Index wird als Übersicht von alle Posts verwendet
+     */
     public function index() {
         $view = new View('post/index');
         $view->title = 'Posts';
@@ -21,6 +35,9 @@ class PostController
         $view->display();
     }
 
+    /**
+     * Details wird als Detail Seite für einzelne Posts verwendet
+     */
     public function details() {
         $post = $this->postRepository->readById($_GET['id']);
 
@@ -31,6 +48,9 @@ class PostController
         $view->display();
     }
 
+    /**
+     * Create wird als Post erstellungsseite verwendet
+     */
     public function create() {
         session_start();
         if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
@@ -43,6 +63,9 @@ class PostController
         }
     }
 
+    /**
+     * Versucht den Post in der Datenbank zu erstellen
+     */
     public function doCreate() {
         if (isset($_POST)) {
             $title = $_POST['title'];
