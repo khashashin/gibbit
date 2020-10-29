@@ -5,7 +5,6 @@ namespace App\Controller;
 
 
 use App\Repository\PostRepository;
-use App\Repository\UserRepository;
 use App\View\View;
 
 class PostController
@@ -34,7 +33,7 @@ class PostController
 
     public function create() {
         session_start();
-        if (!isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
+        if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
             $view = new View('post/create');
             $view->title = 'Post erstellen';
             $view->heading = 'Post erstellen';
