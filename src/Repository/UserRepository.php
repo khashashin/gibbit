@@ -21,7 +21,7 @@ class UserRepository extends Repository
     /**
      * Erstellt einen neuen benutzer mit den gegebenen Werten.
      *
-     * Das Passwort wird vor dem ausführen des Queries noch mit dem SHA1
+     * Das Passwort wird vor dem ausführen des Queries noch mit dem SHA2
      *  Algorythmus gehashed.
      *
      * @param $first_name Wert für die Spalte firstName
@@ -35,8 +35,8 @@ class UserRepository extends Repository
     {
         // Password validieren
         if(isset($password)) {
-            // Passwort via Bcrypt hashen
-            $password = password_hash($password, PASSWORD_BCRYPT);
+            // Passwort hashen
+            $password = hash('sha2', $password);
         } else {
             header('/user/create?error=Es muss ein Passwort angegeben werden'); // Mit Fehler returnen, dass das PW leer war
         }
