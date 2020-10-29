@@ -1,5 +1,12 @@
 <article class="container">
     <div class="row">
+        <!-- Falls vorhanden: Fehler anzeigen -->
+        <?php if (isset($_GET['error'])): ?>
+            <div class="error">
+                <h2>Fehler:</h2>
+                <p><?= $_GET['error'] ?></p>
+            </div>
+        <?php endif; ?>
         <form action="/post/doCreate" method="post" class="col-12">
             <div class="form-group">
                 <label for="post-title">Titel</label>
