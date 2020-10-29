@@ -68,9 +68,15 @@ class PostController
      */
     public function doCreate() {
         if (isset($_POST)) {
-            $title = $_POST['title'];
-            $text = $_POST['text'];
-            $this->postRepository->create($title, $text);
+            if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
+                $title = $_POST['title'];
+                $text = $_POST['text'];
+                $this->postRepository->create($_SESSION['userid'], $title, $text);
+            }
+        } else {
+            // Anfrage an die URI /post/create weiterleiten (HTTP 302)
+            header('Location: /post/create?error=Etwas ist schief gelaufen, wenden Sie sich bitte an die Administration.');
+            exit();
         }
     }
 }
