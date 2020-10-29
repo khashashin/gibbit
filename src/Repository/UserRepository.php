@@ -24,12 +24,15 @@ class UserRepository extends Repository
      * Das Passwort wird vor dem ausführen des Queries noch mit dem SHA2
      *  Algorythmus gehashed.
      *
+     * @param $username Wert für die Spalte username
      * @param $first_name Wert für die Spalte firstName
      * @param $last_name Wert für die Spalte lastName
      * @param $email Wert für die Spalte email
      * @param $password Wert für die Spalte password
      *
      * @throws Exception falls das Ausführen des Statements fehlschlägt
+     *
+     * @return int Das id von generiertes User
      */
     public function create($username, $first_name, $last_name, $email, $password)
     {
