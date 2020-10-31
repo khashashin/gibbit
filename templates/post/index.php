@@ -1,4 +1,4 @@
-<article class="container mb-5">
+<article class="mb-5">
     <div class="row">
         <?php if (empty($posts)): ?>
             <div class="dhd col-12">
