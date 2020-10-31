@@ -39,12 +39,21 @@ class PostController
      * Details wird als Detail Seite für einzelne Posts verwendet
      */
     public function details() {
+        session_start();
         $post = $this->postRepository->readById($_GET['id']);
 
+        // Prüfe ob den Benutzer der Postinhaber ist.
+        $is_post_owner = false;
+        if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
+            if ($_SESSION['userid'] == $post->user_id) {
+                $is_post_owner = true;
+            }
+        }
         $view = new View('post/details');
         $view->title = $post->title;
         $view->heading = $post->title;
         $view->post = $post;
+        $view->is_post_owner = $is_post_owner;
         $view->display();
     }
 
