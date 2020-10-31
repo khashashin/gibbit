@@ -5,6 +5,7 @@ namespace App\Controller;
 
 
 use App\Repository\PostRepository;
+use App\Repository\UserRepository;
 use App\View\View;
 
 /**
@@ -113,7 +114,15 @@ class PostController
             if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
                 $title = $_POST['title'];
                 $text = $_POST['text'];
-                $this->postRepository->create($_SESSION['userid'], $title, $text);
+                $this->postRepository->create($title, $text);
+            }
+        } else {
+            // Anfrage an die URI /post/create weiterleiten (HTTP 302)
+            header('Location: /post/create?error=Etwas ist schief gelaufen, wenden Sie sich bitte an die Administration.');
+            exit();
+        }
+    }
+
     /**
      * Versucht den Post in der Datenbank zu aktualisieren
      */

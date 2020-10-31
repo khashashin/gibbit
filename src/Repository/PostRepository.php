@@ -18,20 +18,18 @@ class PostRepository extends Repository
     /**
      * Erstellt einen neuen Post mit den gegebenen Werten.
      *
-     * @param int $user_id Wert für die Spalte title
      * @param string $title Wert für die Spalte title
      * @param string $text Wert für die Spalte text
      *
      * @throws Exception falls das Ausführen des Statements fehlschlägt
      *
-     * @return int Das id von neu kreierte Post
      */
-    public function create(int $user_id, string $title, string $text) {
+    public function create(string $title, string $text) {
+        session_start();
         // Eingabe validieren
-        if(isset($user_id) && isset($title) && isset($text)) {
-            if(!empty($user_id) && !empty($title) && !empty($text)) {
+        if(isset($title) && isset($text)) {
+            if(!empty($title) && !empty($text)) {
                 // Verhindert XSS
-                htmlspecialchars($user_id);
                 htmlspecialchars($title);
                 htmlspecialchars($text);
             } else {
@@ -44,10 +42,16 @@ class PostRepository extends Repository
         $query = "INSERT INTO $this->tableName (user_id, title, text, created_at, is_approved) VALUES (?, ?, ?, ?, ?)";
         $statement = ConnectionHandler::getConnection()->prepare($query);
 
-        $statement->bind_param('isssi', $user_id,$title, $text, date("c"), 1);
+        $statement->bind_param('isssi', $_SESSION['userid'],$title, $text, date("c"), 1);
 
         if (!$statement->execute()) {
             throw new Exception($statement->error);
+        }
+        // Weiterleiten auf neu erstellte Post
+        header('Location: /post/details/?id='.$statement->insert_id);
+
+    }
+
     /**
      * Aktualisiert einen Post mit den gegebenen Werten.
      *
