@@ -86,7 +86,7 @@ function breadcrumbs($home = 'Home') {
         // Our "title" is the text that will be displayed (strip out .php and turn '_' into a space)
         $title = ucwords(str_replace(Array('.php', '_'), Array('', ' '), $crumb));
         // Workaround to create plural form of a title
-        if (substr($title, -1) != "s") {
+        if ($title == 'Post') {
             $title = $title . "s";
         }
         // If we are not on the last index, then display an <a> tag
