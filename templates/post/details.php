@@ -1,6 +1,6 @@
 <article class="container">
     <div class="row">
-        <div class="col-12 com-sm-8">
+        <div class="col-12 col-sm-8">
             <h1 class="h5"><?= $post->title ?></h1>
             <hr>
             <p><?= $post->text ?></p>
