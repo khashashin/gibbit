@@ -5,7 +5,6 @@ namespace App\Controller;
 
 
 use App\Repository\PostRepository;
-use App\Repository\UserRepository;
 use App\View\View;
 
 /**
@@ -18,11 +17,6 @@ class PostController
      */
     public function __construct() {
         $this->postRepository = new PostRepository();
-    }
-
-    public function phpinfo() {
-        $view = new View('post/phpinfo');
-        $view->display();
     }
 
     /**
