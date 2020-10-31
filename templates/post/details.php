@@ -1,6 +1,6 @@
 <article class="container">
     <div class="row">
-        <div class="col-8">
+        <div class="col-12 col-sm-8">
             <h1 class="h5"><?= $post->title ?></h1>
             <hr>
             <p><?= $post->text ?></p>
@@ -18,7 +18,7 @@
             </div>
             <?php endif; ?>
         </div>
-        <div class="col-4">
+        <div class="col-4 d-none d-sm-block">
             <div class="card w-100 bg-light">
                 <div class="card-header">
                     Ähnliche Posts

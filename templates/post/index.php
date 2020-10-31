@@ -1,4 +1,4 @@
-<article class="container">
+<article class="mb-5">
     <div class="row">
         <?php if (empty($posts)): ?>
             <div class="dhd col-12">
@@ -6,7 +6,27 @@
             </div>
         <?php else: ?>
             <!-- Block Alle Posts -->
-            <div class="col-8 px-4">
+            <div class="col-12 col-sm-8 px-4">
+                <div class="row d-block d-sm-none">
+                    <div class="col-12">
+                        <a href="/post/create" class="btn btn-primary btn-lg btn-block">Post erstellen</a>
+                    </div>
+                </div>
+                <div class="row my-4 d-block d-sm-none">
+                    <div class="col-12">
+                        <div class="card w-100 bg-light">
+                            <div class="card-header">
+                                Neuste Posts
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <?php foreach ($latest_posts_mobile as $post): ?>
+                                    <li class="list-group-item"><a
+                                                href="/post/details?id=<?= $post->id ?>"><?= $post->title; ?></a></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <?php
                     foreach ($posts as $post): ?>
@@ -39,7 +59,7 @@
             <!-- Block Alle Posts -->
 
             <!-- Block Neuste Posts -->
-            <div class="col-4">
+            <div class="col-4 d-none d-sm-block">
                 <div class="row">
                     <div class="col-12">
                         <a href="/post/create" class="btn btn-primary btn-lg btn-block">Post erstellen</a>

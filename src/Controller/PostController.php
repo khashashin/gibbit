@@ -5,7 +5,6 @@ namespace App\Controller;
 
 
 use App\Repository\PostRepository;
-use App\Repository\UserRepository;
 use App\View\View;
 
 /**
@@ -20,11 +19,6 @@ class PostController
         $this->postRepository = new PostRepository();
     }
 
-    public function phpinfo() {
-        $view = new View('post/phpinfo');
-        $view->display();
-    }
-
     /**
      * Index wird als Übersicht von alle Posts verwendet
      */
@@ -33,6 +27,7 @@ class PostController
         $view->title = 'Posts';
         $view->heading = 'Posts';
         $view->posts = $this->postRepository->readAll($max=10);
+        $view->latest_posts_mobile = $this->postRepository->readAll($max=3);
         $view->display();
     }
 

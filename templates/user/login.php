@@ -1,4 +1,4 @@
-<article class="hreview open special login">
+<article class="d-flex align-items-center flex-column">
 
     <!-- Falls vorhanden: Fehler anzeigen -->
     <?php if(isset($_GET['error'])):  ?>
@@ -9,14 +9,19 @@
     <?php endif; ?>
 
     <!-- Login Formular -->
-    <h1>Bei gibbit anmelden</h1>
-	<form action="/user/doLogin" class="login-form" method="post">
-        <label for="username">Benutzername</label>
-        <input type="text" class="form-control" name="username" required>
-        <label for="password">Passwort</label>
-        <input type="password" class="form-control" name="password" required>
-
-        <button type="submit" class="btn btn-primary">Anmelden</button>
-    </form>
+    <h1 class="h3">Bei gibbit anmelden</h1>
+    <div class="col-12 col-sm-6">
+        <form action="/user/doLogin" method="post">
+            <div class="form-group">
+                <label for="username">Benutzername</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Anmelden</button>
+        </form>
+    </div>
 
 </article>
