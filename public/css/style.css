@@ -4,11 +4,7 @@ html {
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-}
-body > .container {
-  padding: 80px 15px 0;
+  height: calc(100vh - 100px);
 }
 
 /* FOOTER */
