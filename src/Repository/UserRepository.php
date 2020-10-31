@@ -21,22 +21,25 @@ class UserRepository extends Repository
     /**
      * Erstellt einen neuen benutzer mit den gegebenen Werten.
      *
-     * Das Passwort wird vor dem ausführen des Queries noch mit dem SHA1
+     * Das Passwort wird vor dem ausführen des Queries noch mit dem SHA2
      *  Algorythmus gehashed.
      *
+     * @param $username Wert für die Spalte username
      * @param $first_name Wert für die Spalte firstName
      * @param $last_name Wert für die Spalte lastName
      * @param $email Wert für die Spalte email
      * @param $password Wert für die Spalte password
      *
      * @throws Exception falls das Ausführen des Statements fehlschlägt
+     *
+     * @return int Das id von generiertes User
      */
     public function create($username, $first_name, $last_name, $email, $password)
     {
         // Password validieren
         if(isset($password)) {
-            // Passwort via Bcrypt hashen
-            $password = password_hash($password, PASSWORD_BCRYPT);
+            // Passwort hashen
+            $password = hash('sha2', $password);
         } else {
             header('/user/create?error=Es muss ein Passwort angegeben werden'); // Mit Fehler returnen, dass das PW leer war
         }

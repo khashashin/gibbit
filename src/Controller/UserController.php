@@ -73,7 +73,7 @@ class UserController
         if ($userRepository->readByUsername($_POST['username'])) {
             $user = $userRepository->readByUsername($_POST['username']);
             $password = $user->password;
-            if (password_verify($_POST['password'], $password)) {
+            if (hash('sha256',$_POST['password']) == $password) {
                 $_SESSION['userid'] = $user->id; // Session Variable setzen (User ID)
                 $_SESSION['username'] = $user->username; // Session Variable setzen (Username)
                 $_SESSION['isLoggedIn'] = true; // Session Variable setzen (Boolean LoggedIn)
