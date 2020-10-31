@@ -102,7 +102,7 @@ function breadcrumbs($home = 'Home') {
 }
 
 ?>
-<nav aria-label="breadcrumb" class="container mt-5 pt-5">
+<nav aria-label="breadcrumb" class="container mt-5 pt-3">
     <?php $crumbs = breadcrumbs()?>
     <ol class="breadcrumb">
         <?php foreach ($crumbs as $crumb): ?>
