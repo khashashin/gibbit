@@ -27,32 +27,34 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
-            <ul class="navbar-nav mr-auto w-50">
-                <li class="nav-item <?php echo (\App\Dispatcher\UriParser::getControllerName() === 'Default') ? 'active' : ''; ?> w-25 text-center">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item <?php echo (\App\Dispatcher\UriParser::getControllerName() === 'Default') ? 'active' : ''; ?>">
                     <!-- Gives class 'active' when selected -->
                     <a class="nav-link" href="/">Home</a>
                 </li>
-                <li class="nav-item <?php echo (\App\Dispatcher\UriParser::getControllerName() === 'Post') ? 'active' : ''; ?> w-25 text-center">
+                <li class="nav-item pl-0 pl-sm-3 <?php echo (\App\Dispatcher\UriParser::getControllerName() === 'Post') ? 'active' : ''; ?>">
                     <!-- Gives class 'active' when selected -->
                     <a class="nav-link" href="/post">Posts</a>
                 </li>
-                <li class="nav-item <?php echo (\App\Dispatcher\UriParser::getControllerName() === 'About') ? 'active' : ''; ?> w-25 text-center">
+                <li class="nav-item pl-0 pl-sm-3 <?php echo (\App\Dispatcher\UriParser::getControllerName() === 'About') ? 'active' : ''; ?>">
                     <!-- Gives class 'active' when selected -->
                     <a class="nav-link" href="/about">Über Uns</a>
                 </li>
-                <li class="nav-item w-25 text-center">
-                    <div class="dropdown show">
-                        <a class="nav-link" href="#" role="button" id="userManagementMenuLink" data-toggle="dropdown"
-                           aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-lg fa-user"></i>&nbsp;<i class="fa fa-chevron-down"></i>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="userManagementMenuLink">
+                <li class="nav-item pl-0 pl-sm-3">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary"><i class="fa fa-lg fa-user"></i></button>
+                        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu">
                             <?php if(isset($_SESSION['isLoggedIn'])): ?>
-                            <a class="dropdown-item" href="#"><?= $_SESSION['username']; ?></a>
-                            <a class="dropdown-item" href="/user/logout">Logout</a>
+                                <h6 class="dropdown-header">Eingeloggt als:</h6>
+                                <a class="dropdown-item" href="#"><?= $_SESSION['username']; ?></a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="/user/logout">Logout</a>
                             <?php else: ?>
-                            <a class="dropdown-item" href="/user/index">Einloggen</a>
-                            <a class="dropdown-item" href="/user/create">Registrieren</a>
+                                <a class="dropdown-item" href="/user/index">Einloggen</a>
+                                <a class="dropdown-item" href="/user/create">Registrieren</a>
                             <?php endif; ?>
                         </div>
                     </div>
