@@ -27,6 +27,7 @@ class PostController
         $view->title = 'Posts';
         $view->heading = 'Posts';
         $view->posts = $this->postRepository->readAll($max=10);
+        $view->latest_posts_mobile = $this->postRepository->readAll($max=3);
         $view->display();
     }
 
