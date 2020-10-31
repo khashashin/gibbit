@@ -73,6 +73,22 @@ class PostController
     }
 
     /**
+     * Edit wird als Post-Änderungsseite verwendet
+     */
+    public function edit() {
+        session_start();
+        $post = $this->postRepository->readById($_GET['id']);
+        if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
+            $view = new View('post/edit');
+            $view->title = 'Post editieren';
+            $view->heading = 'Post editieren';
+            $view->post = $post;
+            $view->display();
+        } else {
+            header('Location: /user/index?error=Du bist nicht eingeloggt!');
+        }
+    }
+    /**
      * Versucht den Post in der Datenbank zu erstellen
      */
     public function doCreate() {
@@ -81,6 +97,16 @@ class PostController
                 $title = $_POST['title'];
                 $text = $_POST['text'];
                 $this->postRepository->create($_SESSION['userid'], $title, $text);
+    /**
+     * Versucht den Post in der Datenbank zu aktualisieren
+     */
+    public function doUpdate() {
+        if (isset($_POST)) {
+            if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
+                $title = $_POST['title'];
+                $text = $_POST['text'];
+                $post_id = $_POST['post_id'];
+                $this->postRepository->update($post_id, $title, $text);
             }
         } else {
             // Anfrage an die URI /post/create weiterleiten (HTTP 302)
