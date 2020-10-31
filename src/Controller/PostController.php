@@ -88,6 +88,23 @@ class PostController
             header('Location: /user/index?error=Du bist nicht eingeloggt!');
         }
     }
+
+    /**
+     * Delete wird zum Post-löschen verwendet
+     */
+    public function delete() {
+        session_start();
+        if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
+            $this->postRepository->deleteById($_GET['id']);
+            $view = new View('post/delete');
+            $view->title = 'Post löschen';
+            $view->heading = 'Post löschen';
+            $view->display();
+        } else {
+            header('Location: /user/index?error=Du bist nicht eingeloggt!');
+        }
+    }
+
     /**
      * Versucht den Post in der Datenbank zu erstellen
      */
