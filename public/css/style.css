@@ -38,35 +38,6 @@ body {
   font-size: 18px;
 }
 
-/* LOGIN */
-.login h1 {
-  font-size: 24px;
-  margin-bottom: 20px;
-}
-
-.login-form {
-  display: flex;
-  flex-direction: column;
-}
-
-.login-form label, .login-form input, .login-form button {
-  width: 50%;
-}
-
-.login-form input {
-  margin-bottom: 20px;
-}
-
-.login-form button {
-  height: 40px;
-}
-
-/* REGISTRATION */
-.register h1 {
-  font-size: 24px;
-  margin-bottom: 20px;
-}
-
 .jumbotron {
   background: rgb(162,225,255);
   background: radial-gradient(circle, rgba(162,225,255,1) 0%, rgba(71,204,242,1) 100%);
