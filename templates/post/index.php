@@ -59,7 +59,7 @@
                             </div>
                         </div>
                     <?php endforeach; ?>
-                    <nav aria-label="Page navigation example" class="my-5 w-100">
+                    <nav aria-label="Page pagination" class="my-5 w-100">
                         <h6 class="card-subtitle mb-2 text-muted text-center">Seiten</h6>
                         <ul class="pagination justify-content-center">
                             <?php

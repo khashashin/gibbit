@@ -36,12 +36,16 @@ class PostController
         } else {
             $page = 1;
         }
+        $total_pages = count($this->postRepository->readAll()) / 5;
+        if ($page > $total_pages) {
+            $page = $total_pages;
+        }
 
         $view = new View('post/index');
         $view->title = 'Posts';
         $view->posts = $this->postRepository->getByOffset($page);
         $view->latest_posts_mobile = $this->postRepository->readAll($max=3);
-        $view->total_pages = count($this->postRepository->readAll()) / 5;
+        $view->total_pages = $total_pages;
         $view->display();
     }
 
