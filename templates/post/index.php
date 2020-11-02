@@ -55,7 +55,7 @@
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title"><?= $post->title; ?></h5>
                                 <h6 class="card-subtitle mb-2 text-muted">Author: <?= $user_name ?></h6>
-                                <a href="/post/details?id=<?= $post->id ?>" class="card-link mt-auto">Meh lesen</a>
+                                <a href="/post/details/?id=<?= $post->id ?>" class="card-link mt-auto">Meh lesen</a>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -79,7 +79,7 @@
                             <ul class="list-group list-group-flush">
                                 <?php foreach ($posts as $post): ?>
                                     <li class="list-group-item"><a
-                                                href="/post/details?id=<?= $post->id ?>"><?= $post->title; ?></a></li>
+                                                href="/post/details/?id=<?= $post->id ?>"><?= $post->title; ?></a></li>
                                 <?php endforeach; ?>
                             </ul>
                         </div>

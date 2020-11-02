@@ -8,7 +8,7 @@ create table `user`
     email       varchar(128) unique not null,
     password    varchar(255) not null,
     is_staff    boolean      not null,
-    is_active   boolean      not null,
+    is_active   boolean      not null default 1,
     date_joined datetime     not null default current_timestamp,
     primary key (id)
 );

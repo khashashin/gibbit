@@ -5,6 +5,7 @@ namespace App\Controller;
 
 
 use App\Repository\PostRepository;
+use App\Repository\UserRepository;
 use App\View\View;
 
 /**
@@ -17,6 +18,7 @@ class PostController
      */
     public function __construct() {
         $this->postRepository = new PostRepository();
+        $this->userRepository = new UserRepository();
     }
 
     /**
@@ -37,6 +39,12 @@ class PostController
     public function details() {
         session_start();
         $post = $this->postRepository->readById($_GET['id']);
+        $similar_posts = array();
+        for ($i = 0; $i <= 3; $i++) {
+            $randomizer = rand(1, 99);
+            $similar_posts[] = $this->postRepository->readById($randomizer);
+        }
+        $user = $this->userRepository->readById($post->user_id);
 
         // Prüfe ob den Benutzer der Postinhaber ist.
         $is_post_owner = false;
@@ -49,6 +57,8 @@ class PostController
         $view->title = $post->title;
         $view->heading = $post->title;
         $view->post = $post;
+        $view->user = $user;
+        $view->similar_posts = $similar_posts;
         $view->is_post_owner = $is_post_owner;
         $view->display();
     }
