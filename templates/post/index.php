@@ -32,7 +32,12 @@
                     foreach ($posts as $post): ?>
                         <?php
                         // Random integer generieren um random Image zu laden
-                        $randomizer = rand(100, 300);
+                        $rand = rand(100, 200);
+                        $invalid_values = [148, 150, 105, 138];
+                        // Remove invalid values
+                        while(in_array($rand, $invalid_values)) {
+                            $rand++;
+                        }
 
                         // Zeitformat umwandeln
                         $created_at = DateTime::createFromFormat('Y-m-d H:i:s', $post->created_at);
@@ -45,8 +50,8 @@
                         ?>
                         <div class="card my-2 w-100">
                             <?php // Random url kreieren ?>
-                            <img class="card-img-top" src="https://picsum.photos/id/<?= $randomizer ?>/330/70"
-                                 alt="<?= $post->text; ?>">
+                            <img class="card-img-top" src="https://picsum.photos/id/<?= $rand ?>/330/70"
+                                 alt="<?= $post->title; ?>">
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title"><?= $post->title; ?></h5>
                                 <h6 class="card-subtitle mb-2 text-muted">Author: <?= $user_name ?></h6>

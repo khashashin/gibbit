@@ -26,29 +26,37 @@ class PostRepository extends Repository
      */
     public function create(string $title, string $text) {
         session_start();
-        // Eingabe validieren
-        if(isset($title) && isset($text)) {
-            if(!empty($title) && !empty($text)) {
-                // Verhindert XSS
-                htmlspecialchars($title);
-                htmlspecialchars($text);
+        // Überprüfen ob der Nutzer eingeloggt ist
+        if(isset($_SESSION['isLoggedIn']) && !empty($_SESSION['userid'])) {
+
+            // Eingabe validieren
+            if (isset($title) && isset($text)) {
+                if (!empty($title) && !empty($text)) {
+                    // Verhindert XSS
+                    htmlspecialchars($title);
+                    htmlspecialchars($text);
+                } else {
+                    header('/post/create?error=Bitte lasse keine Eingabe leer'); // Mit Fehler returnen, dass Werte leer waren
+                }
             } else {
-                header('/post/create?error=Bitte lasse keine Eingabe leer'); // Mit Fehler returnen, dass Werte leer waren
+                header('/post/create?error=Bitte gib überall einen Wert an'); // Mit Fehler returnen, dass Werte fehlen
             }
+
+            $query = "INSERT INTO $this->tableName (user_id, title, text, is_approved) VALUES (?, ?, ?, ?)";
+            $statement = ConnectionHandler::getConnection()->prepare($query);
+
+            $statement->bind_param('issi', $_SESSION['userid'], $title, $text, $is_approved = 1);
+
+            if (!$statement->execute()) {
+                throw new Exception($statement->error);
+            }
+
+            // Weiterleiten auf neu erstellten Post
+            header('Location: /post/details/?id=' . $statement->insert_id);
+
         } else {
-            header('/post/create?error=Bitte gib überall einen Wert an'); // Mit Fehler returnen, dass Werte fehlen
+            header('Location: /user/login/?error=Du musst eingeloggt sein, um Posts erstellen zu können!');
         }
-
-        $query = "INSERT INTO $this->tableName (user_id, title, text, is_approved) VALUES (?, ?, ?, ?)";
-        $statement = ConnectionHandler::getConnection()->prepare($query);
-
-        $statement->bind_param('issi', $_SESSION['userid'],$title, $text, 1);
-
-        if (!$statement->execute()) {
-            throw new Exception($statement->error);
-        }
-        // Weiterleiten auf neu erstellte Post
-        header('Location: /post/details/?id='.$statement->insert_id);
 
     }
 
