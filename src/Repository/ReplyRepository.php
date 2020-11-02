@@ -94,4 +94,24 @@ class ReplyRepository extends Repository
             echo "Permission denied";
         }
     }
+
+    public function getAllRepliesForCommentID($commentID)
+    {
+        $query = "SELECT * FROM {$this->tableName} WHERE comment_id = $commentID";
+
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->execute();
+
+        $result = $statement->get_result();
+        if (!$result) {
+            throw new Exception($statement->error);
+        }
+
+        $replies = array();
+        while ($reply = $result->fetch_object()) {
+            $replies[] = $reply;
+        }
+
+        return $replies;
+    }
 }

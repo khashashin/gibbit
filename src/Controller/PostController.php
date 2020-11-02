@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Repository\CommentRepository;
 use App\Repository\PostRepository;
+use App\Repository\ReplyRepository;
 use App\Repository\UserRepository;
 use App\View\View;
 
@@ -21,6 +22,7 @@ class PostController
         $this->postRepository = new PostRepository();
         $this->userRepository = new UserRepository();
         $this->commentRepository = new CommentRepository();
+        $this->replyRepository = new ReplyRepository();
 
     }
 
@@ -49,7 +51,9 @@ class PostController
         }
         $user = $this->userRepository->readById($post->user_id);
 
+
         $comments = $this->commentRepository->getAllCommentsForPostID($_GET['id']);
+
 
         // Prüfe ob den Benutzer der Postinhaber ist.
         $is_post_owner = false;
@@ -65,15 +69,7 @@ class PostController
         $view->user = $user;
         $view->similar_posts = $similar_posts;
         $view->is_post_owner = $is_post_owner;
-
-        if (empty($comments))
-        {
-            $view->comments = null;
-        }
-        else
-        {
-            $view->comments = $comments;
-        }
+        $view->comments = $comments;
 
         $view->display();
     }

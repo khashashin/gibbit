@@ -118,16 +118,20 @@ class CommentRepository extends Repository
 
     public function getAllCommentsForPostID($postID)
     {
-        $query = "SELECT * FROM $this->tableName WHERE post_id = $postID";
+        $query = "SELECT * FROM {$this->tableName} WHERE post_id = $postID";
 
         $statement = ConnectionHandler::getConnection()->prepare($query);
-        $statement->bind_param('i', $postID);
+        $statement->execute();
 
         $result = $statement->get_result();
         if (!$result) {
             throw new Exception($statement->error);
         }
-        $comments = $result->fetch_all();
+
+        $comments = array();
+        while ($comment = $result->fetch_object()) {
+            $comments[] = $comment;
+        }
 
         return $comments;
     }
