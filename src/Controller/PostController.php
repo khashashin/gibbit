@@ -105,10 +105,11 @@ class PostController
      * Versucht den Post in der Datenbank zu erstellen
      */
     public function doCreate() {
+        session_start();
         if (isset($_POST)) {
             if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
-                $title = $_POST['title'];
-                $text = $_POST['text'];
+                $title = htmlspecialchars($_POST['title']);
+                $text = htmlspecialchars($_POST['text']);
                 $this->postRepository->create($title, $text);
             }
         } else {
@@ -124,9 +125,9 @@ class PostController
     public function doUpdate() {
         if (isset($_POST)) {
             if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
-                $title = $_POST['title'];
-                $text = $_POST['text'];
-                $post_id = $_POST['post_id'];
+                $title = htmlspecialchars($_POST['title']);
+                $text = htmlspecialchars($_POST['text']);
+                $post_id = htmlspecialchars($_POST['post_id']);
                 $this->postRepository->update($post_id, $title, $text);
             }
         } else {
