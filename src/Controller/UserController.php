@@ -33,7 +33,6 @@ class UserController
     public function profile()
     {
         session_start();
-
         if($_SESSION['isLoggedIn'] && $_SESSION['userid']) {
             $view = new View('user/profile');
             $view->title = 'Profil';
