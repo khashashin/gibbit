@@ -27,8 +27,19 @@ class UserController
     {
         $view = new View('user/registration');
         $view->title = 'Benutzer erstellen';
-        $view->heading = 'Benutzer erstellen';
         $view->display();
+    }
+
+    public function profile()
+    {
+        session_start();
+        if($_SESSION['isLoggedIn'] && $_SESSION['userid']) {
+            $view = new View('user/profile');
+            $view->title = 'Profil';
+            $view->display();
+        } else {
+            header('Location: /user/index');
+        }
     }
 
     /**

@@ -30,6 +30,9 @@ class Dispatcher
      */
     public static function dispatch()
     {
+        // Melde alle Fehler außer E_NOTICE
+        //error_reporting(E_ALL & ~E_NOTICE);
+
         $controllerName = UriParser::getControllerName().'Controller';
         $className = 'App\\Controller\\'.$controllerName;
         $methodName = UriParser::getMethodName();
