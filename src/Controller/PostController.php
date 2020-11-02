@@ -30,10 +30,18 @@ class PostController
      * Index wird als Übersicht von alle Posts verwendet
      */
     public function index() {
+        // Holen der aktuellen seite nummer
+        if (isset($_GET['page'])) {
+            $page = $_GET['page'];
+        } else {
+            $page = 1;
+        }
+
         $view = new View('post/index');
         $view->title = 'Posts';
-        $view->posts = $this->postRepository->readAll($max=10);
+        $view->posts = $this->postRepository->getByOffset($page);
         $view->latest_posts_mobile = $this->postRepository->readAll($max=3);
+        $view->total_pages = count($this->postRepository->readAll()) / 5;
         $view->display();
     }
 

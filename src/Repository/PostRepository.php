@@ -122,4 +122,37 @@ class PostRepository extends Repository
 
     }
 
+    /**
+     * Schick begrenztne Anzahl der Posts.
+     *
+     * @param int $page Ab welche index soll die Datensätze zurückgeschickt werden
+     *
+     * @throws Exception falls das Ausführen des Statements fehlschlägt
+     *
+     */
+    public function getByOffset(int $page = 1) {
+
+        $no_of_records_per_page = 5;
+        $offset = ($page-1) * $no_of_records_per_page;
+
+        $query = "SELECT * FROM {$this->tableName} LIMIT $offset, $no_of_records_per_page";
+
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->execute();
+
+        $result = $statement->get_result();
+        if (!$result) {
+            throw new Exception($statement->error);
+        }
+
+        // Datensätze aus dem Resultat holen und in das Array $rows speichern
+        $rows = array();
+        while ($row = $result->fetch_object()) {
+            $rows[] = $row;
+        }
+
+        return $rows;
+
+    }
+
 }

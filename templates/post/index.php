@@ -59,6 +59,29 @@
                             </div>
                         </div>
                     <?php endforeach; ?>
+                    <nav aria-label="Page navigation example" class="my-5 w-100">
+                        <h6 class="card-subtitle mb-2 text-muted text-center">Seiten</h6>
+                        <ul class="pagination justify-content-center">
+                            <?php
+                            if (isset($_GET['page'])) {
+                                $page = $_GET['page'];
+                            } else {
+                                $page = 1;
+                            }?>
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1" tabindex="-1">Erste</a>
+                            </li>
+                            <li class="page-item <?php if($page <= 1){ echo 'disabled'; } ?>">
+                                <a class="page-link" href="<?php if($page <= 1){ echo '#'; } else { echo "?page=".($page - 1); } ?>">Vorherige</a>
+                            </li>
+                            <li class="page-item <?php if($page >= $total_pages){ echo 'disabled'; } ?>">
+                                <a class="page-link" href="<?php if($page >= $total_pages){ echo '#'; } else { echo "?page=".($page + 1); } ?>">Nächste</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page=<?php echo $total_pages; ?>">Letzte</a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
             <!-- Block Alle Posts -->
