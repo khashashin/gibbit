@@ -24,7 +24,8 @@
                     Ähnliche Posts
                 </div>
                 <ul class="list-group list-group-flush">
-
+                    <!-- Temporär wird statische posts verwendet
+                         TODO: Get posts by similar tags (!not implemented yet)-->
                     <li class="list-group-item"><a
                             href="/post/details?id=<?= $post->id ?>"><?= $post->title; ?></a></li>
                     <li class="list-group-item"><a
