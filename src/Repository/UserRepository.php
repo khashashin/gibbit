@@ -39,7 +39,7 @@ class UserRepository extends Repository
         // Password validieren
         if(isset($password)) {
             // Passwort hashen
-            $password = hash('sha2', $password);
+            $password = hash('sha256', $password);
         } else {
             header('/user/create?error=Es muss ein Passwort angegeben werden'); // Mit Fehler returnen, dass das PW leer war
         }
