@@ -33,7 +33,7 @@
                         <?php
                         // Random integer generieren um random Image zu laden
                         $rand = rand(100, 200);
-                        $invalid_values = [148, 150, 105, 138];
+                        $invalid_values = [148, 150, 105, 138, 286];
                         // Remove invalid values
                         while(in_array($rand, $invalid_values)) {
                             $rand++;

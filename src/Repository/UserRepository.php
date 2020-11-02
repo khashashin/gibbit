@@ -90,4 +90,17 @@ class UserRepository extends Repository
         // Den gefundenen Datensatz zurückgeben
         return $row;
     }
+
+    public function updateUsername($username, $userid)
+    {
+        $query = "UPDATE $this->tableName SET username = ? WHERE id = ?";
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->bind_param('si', $username, $userid);
+
+        if (!$statement->execute()) {
+            throw new Exception($statement->error);
+        }
+
+        header('Location: /user/profile');
+    }
 }

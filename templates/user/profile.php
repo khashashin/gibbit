@@ -36,15 +36,29 @@
             </div>
         </div>
 
+        <?php
+        // Benutzer Objekt erzeugen und in Variablen abfüllen
+        $userRepostory = new \App\Repository\UserRepository();
+        $user = $userRepostory->readById($_SESSION['userid']);
+        $username = $user->username;
+        $password = $user->password;
+        ?>
+
         <div class="col-6 d-none d-sm-block">
             <div class="card w-100 bg-light">
                 <div class="card-header">
                     Account verwalten
                 </div>
                 <ul class="list-group list-group-flush">
-                    <!-- TODO: Needs to be implemented -->
-                    <li class="list-group-item"><a href="#">Benutzername ändern</a></li>
-                    <li class="list-group-item"><a href="#">Passwort ändern</a></li>
+                    <li class="list-group-item">
+                        <form name="updateCredentials" action="/user/updateUsername" class="updateCredentials" method="post">
+                            <label class="w-50" for="username">Benutzername<br>
+                                <input class="w-100" value="<?= $username ?>" type="text" name="username">
+                            </label>
+                            <input name="userid" type="hidden" value="<?= $_SESSION['userid']; ?>">
+                            <button class="btn btn-success profile-submit" type="submit">Änderungen speichern</button>
+                        </form>
+                    </li>
                     <li class="list-group-item"><a href="#">Account löschen</a></li>
                 </ul>
             </div>

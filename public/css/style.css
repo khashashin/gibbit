@@ -42,3 +42,13 @@ body {
   background: rgb(162,225,255);
   background: radial-gradient(circle, rgba(162,225,255,1) 0%, rgba(71,204,242,1) 100%);
 }
+
+/* PROFILE */
+.profile-submit {
+  float: right;
+  margin-top: 20px;
+}
+
+.updateCredentials input {
+  padding: 3px;
+}
