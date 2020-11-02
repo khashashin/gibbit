@@ -1,3 +1,11 @@
+<script type="application/javascript">
+    confirmDelete = () => {
+        if (confirm('Möchten Sie wirklich den Post löschen?')) {
+            window.location.href = "/post/delete/?id=<?= $post->id ?>";
+        } else return
+    }
+</script>
+
 <article>
     <div class="row">
         <div class="col-12 col-sm-8">
@@ -13,15 +21,8 @@
                 <i><?= $created_at ?></i></p>
             <?php if ($is_post_owner): ?>
                 <div class="btn-group">
-                    <script type="application/javascript">
-                        confirmDelete = () => {
-                            if (confirm('Möchten Sie wirklich den Post löschen?')) {
-                                window.location.href = "/post/delete/?id=<?= $post->id ?>";
-                            } else return
-                        }
-                    </script>
-                    <a href="/post/edit/?id=<?= $post->id ?>" class="btn btn-outline-secondary btn-sm">Editieren</a>
-                    <button class="btn btn-outline-danger btn-sm" onclick="confirmDelete()">Löschen</button>
+                    <a href="/post/edit/?id=<?= $post->id ?>"><button class="btn btn-warning">Editieren</button></a>
+                    <button class="btn btn-danger" onclick="confirmDelete()">Löschen</button>
                 </div>
                 <hr>
             <?php endif; ?>
@@ -45,6 +46,5 @@
         </div>
     </div>
 </article>
-
 
 
