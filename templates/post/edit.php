@@ -15,9 +15,7 @@
             </div>
             <div class="form-group">
                 <label for="post-text">Post</label>
-                <textarea id="post-text" name="text" rows="10" class="form-control" required>
-                    <?= $post->text ?>
-                </textarea>
+                <textarea id="post-text" name="text" rows="10" class="form-control" required><?= $post->text ?></textarea>
             </div>
             <input type="hidden" name="post_id" value="<?= $post->id ?>">
             <button type="submit" class="btn btn-primary">Speichern</button>
