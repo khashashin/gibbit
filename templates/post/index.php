@@ -33,7 +33,7 @@
                         <?php
                         // Random integer generieren um random Image zu laden
                         $rand = rand(100, 200);
-                        $invalid_values = [148, 150, 105, 138, 286];
+                        $invalid_values = [148, 150, 105, 138];
                         // Remove invalid values
                         while(in_array($rand, $invalid_values)) {
                             $rand++;
@@ -55,7 +55,7 @@
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title"><?= $post->title; ?></h5>
                                 <h6 class="card-subtitle mb-2 text-muted">Author: <?= $full_name ?></h6>
-                                <a href="/post/details/?id=<?= $post->id ?>" class="card-link mt-auto">Meh lesen</a>
+                                <a href="/post/details/?id=<?= $post->id ?>" class="card-link mt-auto">Mehr lesen</a>
                             </div>
                         </div>
                     <?php endforeach; ?>
