@@ -36,29 +36,6 @@ class UserRepository extends Repository
      */
     public function create($username, $first_name, $last_name, $email, $password)
     {
-        // Password validieren
-        if(isset($password)) {
-            // Passwort hashen
-            $password = hash('sha2', $password);
-        } else {
-            header('/user/create?error=Es muss ein Passwort angegeben werden'); // Mit Fehler returnen, dass das PW leer war
-        }
-
-        // Eingabe validieren
-        if(isset($username) && isset($first_name) && isset($last_name) && isset($email)) {
-            if(!empty($username) && !empty($first_name) && !empty($last_name) && !isset($email)) {
-                // Verhindert XSS
-                htmlspecialchars($username);
-                htmlspecialchars($first_name);
-                htmlspecialchars($last_name);
-                htmlspecialchars($email);
-            } else {
-                header('/user/create?error=Bitte lasse keine Eingabe leer'); // Mit Fehler returnen, dass Werte leer waren
-            }
-        } else {
-            header('/user/create?error=Bitte gib überall einen Wert an'); // Mit Fehler returnen, dass Werte fehlen
-        }
-
         $query = "INSERT INTO $this->tableName (username, first_name, last_name, email, password) VALUES (?, ?, ?, ?, ?)";
 
         $statement = ConnectionHandler::getConnection()->prepare($query);

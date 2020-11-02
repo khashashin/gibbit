@@ -5,6 +5,7 @@ namespace App\Controller;
 
 
 use App\Repository\PostRepository;
+use App\Repository\UserRepository;
 use App\View\View;
 
 /**
@@ -17,6 +18,7 @@ class PostController
      */
     public function __construct() {
         $this->postRepository = new PostRepository();
+        $this->userRepository = new UserRepository();
     }
 
     /**
@@ -37,6 +39,12 @@ class PostController
     public function details() {
         session_start();
         $post = $this->postRepository->readById($_GET['id']);
+        $similar_posts = array();
+        for ($i = 0; $i <= 3; $i++) {
+            $randomizer = rand(1, 99);
+            $similar_posts[] = $this->postRepository->readById($randomizer);
+        }
+        $user = $this->userRepository->readById($post->user_id);
 
         // Prüfe ob den Benutzer der Postinhaber ist.
         $is_post_owner = false;
@@ -49,12 +57,26 @@ class PostController
         $view->title = $post->title;
         $view->heading = $post->title;
         $view->post = $post;
+        $view->user = $user;
+        $view->similar_posts = $similar_posts;
         $view->is_post_owner = $is_post_owner;
         $view->display();
     }
 
     /**
-     * Create wird als Post erstellungsseite verwendet
+     * User Posts wird als ein Übersicht auf alle Posts von bestimmte Benutzer verwendet
+     */
+    public function user_posts() {
+        $posts = $this->postRepository->getAllPostsByUser($_GET['user_id']);
+        $view = new View('post/user_posts');
+        $view->title = 'Benutzer Posts';
+        $view->heading = 'Benutzer Posts';
+        $view->posts = $posts;
+        $view->display();
+    }
+
+    /**
+     * Zeigt die View um einen neuen Post zu erstellen
      */
     public function create() {
         session_start();
@@ -69,7 +91,7 @@ class PostController
     }
 
     /**
-     * Edit wird als Post-Änderungsseite verwendet
+     * Zeigt die View um einen post zu editieren
      */
     public function edit() {
         session_start();
@@ -86,7 +108,7 @@ class PostController
     }
 
     /**
-     * Delete wird zum Post-löschen verwendet
+     * Zeit die View um einen Post zu löschen
      */
     public function delete() {
         session_start();
@@ -102,37 +124,91 @@ class PostController
     }
 
     /**
-     * Versucht den Post in der Datenbank zu erstellen
+     * Validiert die Benutzereingabe und ruft die Methode zum Erstellen im Model auf
      */
     public function doCreate() {
         if (isset($_POST)) {
-            if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
-                $title = $_POST['title'];
-                $text = $_POST['text'];
-                $this->postRepository->create($title, $text);
+            if(!$this->post_is_valid($_POST['title'], $_POST['text'])) {
+                header('Location: /post/create');
+                exit();
             }
-        } else {
-            // Anfrage an die URI /post/create weiterleiten (HTTP 302)
-            header('Location: /post/create?error=Etwas ist schief gelaufen, wenden Sie sich bitte an die Administration.');
-            exit();
+            $title = htmlspecialchars($_POST['title']);
+            $text = htmlspecialchars($_POST['text']);
+            $this->postRepository->create($title, $text);
         }
     }
 
     /**
-     * Versucht den Post in der Datenbank zu aktualisieren
+     * Validiert die Benutzereingabe und ruft die Methode zum Aktualisieren im Model auf
      */
     public function doUpdate() {
         if (isset($_POST)) {
-            if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
-                $title = $_POST['title'];
-                $text = $_POST['text'];
-                $post_id = $_POST['post_id'];
-                $this->postRepository->update($post_id, $title, $text);
+            if(!$this->update_is_valid($_POST['post_id'], $_POST['title'], $_POST['text'])) {
+                header('Location: /post/index');
+                exit();
             }
-        } else {
-            // Anfrage an die URI /post/create weiterleiten (HTTP 302)
-            header('Location: /post/create?error=Etwas ist schief gelaufen, wenden Sie sich bitte an die Administration.');
-            exit();
+            $title = htmlspecialchars($_POST['title']);
+            $text = htmlspecialchars($_POST['text']);
+            $post_id = $_POST['post_id'];
+            $this->postRepository->update($post_id, $title, $text);
         }
+    }
+
+    /**
+     * Validiert, ob ein Post weder ungesetzt noch leer ist
+     * @param $title
+     * @param $text
+     * @return bool
+     */
+    public function post_is_valid($title, $text)
+    {
+        session_start();
+
+        // Überprüfen ob der Nutzer eingeloggt ist
+        if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['userid'])) {
+
+            // Eingabe validieren (Werte sind gesetzt)
+            if (isset($title) && isset($text)) {
+
+                // Eingabe validieren (Werte sind nicht leer)
+                if (!empty($title) && !empty($text)) {
+                    return true;
+                } else {
+                    header('/post/create?error=Bitte lasse keine Eingabe leer'); // Mit Fehler returnen, dass Werte leer waren
+                    return false;
+                }
+
+            } else {
+                header('/post/create?error=Bitte gib überall einen Wert an'); // Mit Fehler returnen, dass Werte fehlen
+                return false;
+            }
+
+        } else {
+            header('Location: /user/login/?error=Bitte logge dich ein, um einen Post erstellen zu können!'); // Mit Fehler returnen, dass Nutzer nicht eingeloggt war
+            return false;
+        }
+    }
+
+    /**
+     * Validiert ob ein Post weder ungesetzt noch leer ist und überprüft, ob der Nutzer tatsächlich der Autor des Posts ist
+     * @param $post_id
+     * @param $title
+     * @param $text
+     * @return bool
+     * @throws \Exception
+     */
+    public function update_is_valid($post_id, $title, $text)
+    {
+        session_start();
+
+        // Prüfung ob Post valid ist
+        $this->post_is_valid($title, $text);
+
+        // Prüfung ob Post von Nutzer erstellt wurde
+        if(!($this->postRepository->readById($post_id)->user_id === $_SESSION['userid'])) {
+            header('Location: /post/edit/?error=Du bist hierzu nicht berechtigt!');
+            return false;
+        }
+        return true;
     }
 }

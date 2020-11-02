@@ -7,11 +7,6 @@
         <?php else: ?>
             <!-- Block Alle Posts -->
             <div class="col-12 col-sm-8 px-4">
-                <div class="row d-block d-sm-none">
-                    <div class="col-12">
-                        <a href="/post/create" class="btn btn-primary btn-lg btn-block">Post erstellen</a>
-                    </div>
-                </div>
                 <div class="row my-4 d-block d-sm-none">
                     <div class="col-12">
                         <div class="card w-100 bg-light">
@@ -21,7 +16,7 @@
                             <ul class="list-group list-group-flush">
                                 <?php foreach ($latest_posts_mobile as $post): ?>
                                     <li class="list-group-item"><a
-                                                href="/post/details?id=<?= $post->id ?>"><?= $post->title; ?></a></li>
+                                            href="/post/details?id=<?= $post->id ?>"><?= $post->title; ?></a></li>
                                 <?php endforeach; ?>
                             </ul>
                         </div>
@@ -32,12 +27,7 @@
                     foreach ($posts as $post): ?>
                         <?php
                         // Random integer generieren um random Image zu laden
-                        $rand = rand(100, 200);
-                        $invalid_values = [148, 150, 105, 138];
-                        // Remove invalid values
-                        while(in_array($rand, $invalid_values)) {
-                            $rand++;
-                        }
+                        $randomizer = rand(100, 300);
 
                         // Zeitformat umwandeln
                         $created_at = DateTime::createFromFormat('Y-m-d H:i:s', $post->created_at);
@@ -50,8 +40,8 @@
                         ?>
                         <div class="card my-2 w-100">
                             <?php // Random url kreieren ?>
-                            <img class="card-img-top" src="https://picsum.photos/id/<?= $rand ?>/330/70"
-                                 alt="<?= $post->title; ?>">
+                            <img class="card-img-top" src="https://picsum.photos/id/<?= $randomizer ?>/330/70"
+                                 alt="<?= $post->text; ?>">
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title"><?= $post->title; ?></h5>
                                 <h6 class="card-subtitle mb-2 text-muted">Author: <?= $user_name ?></h6>
@@ -67,11 +57,6 @@
             <div class="col-4 d-none d-sm-block">
                 <div class="row">
                     <div class="col-12">
-                        <a href="/post/create" class="btn btn-primary btn-lg btn-block">Post erstellen</a>
-                    </div>
-                </div>
-                <div class="row mt-5">
-                    <div class="col-12">
                         <div class="card w-100 bg-light">
                             <div class="card-header">
                                 Neuste Posts
@@ -79,7 +64,7 @@
                             <ul class="list-group list-group-flush">
                                 <?php foreach ($posts as $post): ?>
                                     <li class="list-group-item"><a
-                                                href="/post/details/?id=<?= $post->id ?>"><?= $post->title; ?></a></li>
+                                            href="/post/details/?id=<?= $post->id ?>"><?= $post->title; ?></a></li>
                                 <?php endforeach; ?>
                             </ul>
                         </div>

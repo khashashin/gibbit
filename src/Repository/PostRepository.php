@@ -25,31 +25,15 @@ class PostRepository extends Repository
      *
      */
     public function create(string $title, string $text) {
-        session_start();
-        // Eingabe validieren
-        if(isset($title) && isset($text)) {
-            if(!empty($title) && !empty($text)) {
-                // Verhindert XSS
-                htmlspecialchars($title);
-                htmlspecialchars($text);
-            } else {
-                header('/post/create?error=Bitte lasse keine Eingabe leer'); // Mit Fehler returnen, dass Werte leer waren
-            }
-        } else {
-            header('/post/create?error=Bitte gib überall einen Wert an'); // Mit Fehler returnen, dass Werte fehlen
-        }
-
-        $query = "INSERT INTO $this->tableName (user_id, title, text, created_at, is_approved) VALUES (?, ?, ?, ?, ?)";
+        $query = "INSERT INTO $this->tableName (user_id, title, text, is_approved) VALUES (?, ?, ?, ?)";
         $statement = ConnectionHandler::getConnection()->prepare($query);
-
-        $statement->bind_param('isssi', $_SESSION['userid'],$title, $text, date("c"), 1);
+        $statement->bind_param('issi', $_SESSION['userid'], $title, $text, $is_approved = 1);
 
         if (!$statement->execute()) {
             throw new Exception($statement->error);
         }
-        // Weiterleiten auf neu erstellte Post
-        header('Location: /post/details/?id='.$statement->insert_id);
-
+        // Weiterleiten auf neu erstellten Post
+        header('Location: /post/details/?id=' . $statement->insert_id);
     }
 
     /**
@@ -62,31 +46,49 @@ class PostRepository extends Repository
      * @throws Exception falls das Ausführen des Statements fehlschlägt
      *
      */
-    public function update(int $post_id, string $title, string $text) {
-        session_start();
-        // Eingabe validieren
-        if(isset($title) && isset($text)) {
-            if(!empty($title) && !empty($text)) {
-                // Verhindert XSS
-                htmlspecialchars($title);
-                htmlspecialchars($text);
-            } else {
-                header('/post/create?error=Bitte lasse keine Eingabe leer'); // Mit Fehler returnen, dass Werte leer waren
-            }
-        } else {
-            header('/post/create?error=Bitte gib überall einen Wert an'); // Mit Fehler returnen, dass Werte fehlen
-        }
-
-        $query = "UPDATE $this->tableName SET title=$title, text=$text WHERE id=$post_id";
+    public function update($post_id, $title, $text) {
+        $query = "UPDATE $this->tableName SET title = ?, text = ? WHERE id = ?";
         $statement = ConnectionHandler::getConnection()->prepare($query);
-
-        $statement->bind_param('ss', $title, $text);
-
+        $statement->bind_param('ssi', $title, $text, $post_id);
         if (!$statement->execute()) {
             throw new Exception($statement->error);
         }
-        // Weiterleiten auf neu erstellte Post
-        header('Location: /post/details/?id='.$statement->insert_id);
+        // Weiterleiten auf geupdateten Post -- NEEDS FIX
+        header('Location: /post/details/?id=' . $statement->insert_id);
+
+    }
+
+    /**
+     * Schick alle Posts die vom bestimmte User erstellt wurde.
+     *
+     * @param int $user_id Wert für die Spalte title
+     *
+     * @throws Exception falls das Ausführen des Statements fehlschlägt
+     *
+     */
+    public function getAllPostsByUser(int $user_id) {
+
+        $query = "SELECT * FROM {$this->tableName} WHERE user_id=?";
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+
+        $statement->bind_param('i', $user_id);
+
+        // Das Statement absetzen
+        $statement->execute();
+
+        // Resultat der Abfrage holen
+        $result = $statement->get_result();
+        if (!$result) {
+            throw new Exception($statement->error);
+        }
+
+        // Datensätze aus dem Resultat holen und in das Array $rows speichern
+        $rows = array();
+        while ($row = $result->fetch_object()) {
+            $rows[] = $row;
+        }
+
+        return $rows;
 
     }
 
