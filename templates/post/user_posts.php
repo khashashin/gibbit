@@ -41,7 +41,7 @@
                         ?>
                         <div class="card my-2 w-100">
                             <?php // Random url kreieren ?>
-                            <img class="card-img-top" src="https://picsum.photos/id/<?= $randomizer ?>/330/70"
+                            <img class="card-img-top" src="https://picsum.photos/id/<?= $rand ?>/330/70"
                                  alt="<?= $post->text; ?>">
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title"><?= $post->title; ?></h5>
