@@ -1,4 +1,4 @@
-<article class="container">
+<article>
     <div class="row">
         <div class="col-12 col-sm-8">
             <h1 class="h5"><?= $post->title ?></h1>
