@@ -38,11 +38,7 @@ class PostController
     public function details() {
         session_start();
         $post = $this->postRepository->readById($_GET['id']);
-        $similar_posts = array();
-        for ($i = 0; $i <= 3; $i++) {
-            $randomizer = rand(1, 99);
-            $similar_posts[] = $this->postRepository->readById($randomizer);
-        }
+        $similar_posts = $this->postRepository->getRandomPosts();
         $user = $this->userRepository->readById($post->user_id);
 
         // Prüfe ob den Benutzer der Postinhaber ist.

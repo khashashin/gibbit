@@ -92,4 +92,34 @@ class PostRepository extends Repository
 
     }
 
+    /**
+     * Schick zufällig geordnete Posts.
+     *
+     * @param int $max Wie viele Datensätze höchstens zurückgegeben werden sollen
+     *               (optional. standard 4)
+     *
+     * @throws Exception falls das Ausführen des Statements fehlschlägt
+     *
+     */
+    public function getRandomPosts($max = 4) {
+
+        $query = "SELECT * FROM {$this->tableName} ORDER BY RAND() LIMIT 0, $max";
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->execute();
+
+        $result = $statement->get_result();
+        if (!$result) {
+            throw new Exception($statement->error);
+        }
+
+        // Datensätze aus dem Resultat holen und in das Array $rows speichern
+        $rows = array();
+        while ($row = $result->fetch_object()) {
+            $rows[] = $row;
+        }
+
+        return $rows;
+
+    }
+
 }
