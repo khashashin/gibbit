@@ -39,10 +39,10 @@ class PostRepository extends Repository
             header('/post/create?error=Bitte gib überall einen Wert an'); // Mit Fehler returnen, dass Werte fehlen
         }
 
-        $query = "INSERT INTO $this->tableName (user_id, title, text, created_at, is_approved) VALUES (?, ?, ?, ?, ?)";
+        $query = "INSERT INTO $this->tableName (user_id, title, text, is_approved) VALUES (?, ?, ?, ?)";
         $statement = ConnectionHandler::getConnection()->prepare($query);
 
-        $statement->bind_param('isssi', $_SESSION['userid'],$title, $text, date("c"), 1);
+        $statement->bind_param('issi', $_SESSION['userid'],$title, $text, 1);
 
         if (!$statement->execute()) {
             throw new Exception($statement->error);
