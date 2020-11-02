@@ -95,8 +95,8 @@ class PostController
      */
     public function edit() {
         session_start();
-        $post = $this->postRepository->readById($_GET['id']);
         if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
+            $post = $this->postRepository->readById($_GET['id']);
             $view = new View('post/edit');
             $view->title = 'Post editieren';
             $view->heading = 'Post editieren';
@@ -127,14 +127,19 @@ class PostController
      * Validiert die Benutzereingabe und ruft die Methode zum Erstellen im Model auf
      */
     public function doCreate() {
-        if (isset($_POST)) {
-            if(!$this->post_is_valid($_POST['title'], $_POST['text'])) {
-                header('Location: /post/create');
-                exit();
+        session_start();
+        if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
+            if (isset($_POST)) {
+                if(!$this->post_is_valid($_POST['title'], $_POST['text'])) {
+                    header('Location: /post/create');
+                    exit();
+                }
+                $title = htmlspecialchars($_POST['title']);
+                $text = htmlspecialchars($_POST['text']);
+                $this->postRepository->create($title, $text);
             }
-            $title = htmlspecialchars($_POST['title']);
-            $text = htmlspecialchars($_POST['text']);
-            $this->postRepository->create($title, $text);
+        } else {
+            header('Location: /user/index?error=Du bist nicht eingeloggt!');
         }
     }
 
@@ -142,15 +147,20 @@ class PostController
      * Validiert die Benutzereingabe und ruft die Methode zum Aktualisieren im Model auf
      */
     public function doUpdate() {
-        if (isset($_POST)) {
-            if(!$this->update_is_valid($_POST['post_id'], $_POST['title'], $_POST['text'])) {
-                header('Location: /post/index');
-                exit();
+        session_start();
+        if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
+            if (isset($_POST)) {
+                if(!$this->update_is_valid($_POST['post_id'], $_POST['title'], $_POST['text'])) {
+                    header('Location: /post/index');
+                    exit();
+                }
+                $title = htmlspecialchars($_POST['title']);
+                $text = htmlspecialchars($_POST['text']);
+                $post_id = $_POST['post_id'];
+                $this->postRepository->update($post_id, $title, $text);
             }
-            $title = htmlspecialchars($_POST['title']);
-            $text = htmlspecialchars($_POST['text']);
-            $post_id = $_POST['post_id'];
-            $this->postRepository->update($post_id, $title, $text);
+        } else {
+            header('Location: /user/index?error=Du bist nicht eingeloggt!');
         }
     }
 
