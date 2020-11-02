@@ -27,7 +27,6 @@ class PostController
     public function index() {
         $view = new View('post/index');
         $view->title = 'Posts';
-        $view->heading = 'Posts';
         $view->posts = $this->postRepository->readAll($max=10);
         $view->latest_posts_mobile = $this->postRepository->readAll($max=3);
         $view->display();
@@ -55,7 +54,6 @@ class PostController
         }
         $view = new View('post/details');
         $view->title = $post->title;
-        $view->heading = $post->title;
         $view->post = $post;
         $view->user = $user;
         $view->similar_posts = $similar_posts;
@@ -70,7 +68,6 @@ class PostController
         $posts = $this->postRepository->getAllPostsByUser($_GET['user_id']);
         $view = new View('post/user_posts');
         $view->title = 'Benutzer Posts';
-        $view->heading = 'Benutzer Posts';
         $view->posts = $posts;
         $view->display();
     }
@@ -83,7 +80,6 @@ class PostController
         if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
             $view = new View('post/create');
             $view->title = 'Post erstellen';
-            $view->heading = 'Post erstellen';
             $view->display();
         } else {
             header('Location: /user/index?error=Du bist nicht eingeloggt!');
@@ -99,7 +95,6 @@ class PostController
         if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
             $view = new View('post/edit');
             $view->title = 'Post editieren';
-            $view->heading = 'Post editieren';
             $view->post = $post;
             $view->display();
         } else {
@@ -116,7 +111,6 @@ class PostController
             $this->postRepository->deleteById($_GET['id']);
             $view = new View('post/delete');
             $view->title = 'Post löschen';
-            $view->heading = 'Post löschen';
             $view->display();
         } else {
             header('Location: /user/index?error=Du bist nicht eingeloggt!');

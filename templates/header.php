@@ -12,7 +12,7 @@
     <!-- Fontawesome (Icons) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <title><?= $title; ?> | Bbc MVC</title>
+    <title><?= $title; ?> | gibbit</title>
 </head>
 <body>
 
@@ -49,7 +49,7 @@
                         <div class="dropdown-menu">
                             <?php if(isset($_SESSION['isLoggedIn'])): ?>
                                 <h6 class="dropdown-header">Eingeloggt als:</h6>
-                                <a class="dropdown-item" href="#"><?= $_SESSION['username']; ?></a>
+                                <a class="dropdown-item" href="/user/profile"><?= $_SESSION['username']; ?></a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="/user/logout">Logout</a>
                             <?php else: ?>
