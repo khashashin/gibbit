@@ -90,4 +90,38 @@ class PostRepository extends Repository
 
     }
 
+    /**
+     * Schick alle Posts die vom bestimmte User erstellt wurde.
+     *
+     * @param int $user_id Wert für die Spalte title
+     *
+     * @throws Exception falls das Ausführen des Statements fehlschlägt
+     *
+     */
+    public function getAllPostsByUser(int $user_id) {
+
+        $query = "SELECT * FROM {$this->tableName} WHERE user_id=?";
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+
+        $statement->bind_param('i', $user_id);
+
+        // Das Statement absetzen
+        $statement->execute();
+
+        // Resultat der Abfrage holen
+        $result = $statement->get_result();
+        if (!$result) {
+            throw new Exception($statement->error);
+        }
+
+        // Datensätze aus dem Resultat holen und in das Array $rows speichern
+        $rows = array();
+        while ($row = $result->fetch_object()) {
+            $rows[] = $row;
+        }
+
+        return $rows;
+
+    }
+
 }
