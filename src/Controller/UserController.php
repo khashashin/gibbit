@@ -69,7 +69,7 @@ class UserController
 
             $userRepository = new UserRepository();
             $userRepository->create($username, $first_name, $last_name, $email, $password);
-
+            header('Location: /user/index');
         } else {
             // Anfrage an die URI /user/create weiterleiten (HTTP 302)
             header('Location: /user/create');
@@ -100,22 +100,50 @@ class UserController
         }
     }
 
+    /**
+     * Updates the username
+     * @throws \Exception
+     */
     public function updateUsername()
     {
-        if (isset($_POST)) {
-            if(!(isset($_POST['username']) && isset($_POST['userid']) && !empty($_POST['username']) && !empty($_POST['userid']))) {
+        session_start();
+        if($_SESSION['isLoggedIn'] && $_SESSION['userid']) {
+            if (isset($_POST)) {
+                if($_POST['userid'] == $_SESSION['userid']) {
+                    if (!(isset($_POST['username']) && isset($_POST['userid']) && !empty($_POST['username']) && !empty($_POST['userid']))) {
+                        header('Location: /user/profile');
+                    }
+
+                    $username = htmlspecialchars($_POST['username']);
+                    $userRepository = new UserRepository();
+                    $userRepository->updateUsername($username, $_POST['userid']);
+
+                } else {
+                    header('Location: /user/profile');
+                    exit();
+                }
+            } else {
+                // Anfrage an die URI /user/create weiterleiten (HTTP 302)
                 header('Location: /user/profile');
+                exit();
             }
-
-            $username = htmlspecialchars($_POST['username']);
-            $userRepository = new UserRepository();
-            $userRepository->updateUsername($username, $_POST['userid']);
-
         } else {
-            // Anfrage an die URI /user/create weiterleiten (HTTP 302)
-            header('Location: /user/profile');
-            exit();
+            header('Location: /user/index/?error=Du musst eingeloggt sein, um deinen Account löschen zu können!');
         }
+    }
+
+    public function deleteUser()
+    {
+        session_start();
+        if($_SESSION['isLoggedIn'] && $_SESSION['userid']) {
+            $userRepository = new UserRepository();
+            $userRepository->deleteById($_SESSION['userid']);
+            unset($_SESSION);
+            session_destroy();
+        } else {
+            header('Location: /user/index/?error=Du musst eingeloggt sein, um deinen Account löschen zu können!');
+        }
+        header('Location: /');
     }
 
     /**
