@@ -12,7 +12,8 @@
             <h1 class="h5"><?= $post->title ?></h1>
             <hr>
             <p><?= $post->text ?></p>
-            <p><a href="/post/user_posts/?user_id=<?= $user->id?>"><strong><?= $user->first_name . " " . $user->last_name ?></strong></a><br>
+            <p>
+                <a href="/post/user_posts/?user_id=<?= $user->id ?>"><strong><?= $user->first_name . " " . $user->last_name ?></strong></a><br>
                 <?php
                 // Zeitformat umwandeln
                 $created_at = DateTime::createFromFormat('Y-m-d H:i:s', $post->created_at);
@@ -21,7 +22,9 @@
                 <i><?= $created_at ?></i></p>
             <?php if ($is_post_owner): ?>
                 <div class="btn-group">
-                    <a href="/post/edit/?id=<?= $post->id ?>"><button class="btn btn-warning">Editieren</button></a>
+                    <a href="/post/edit/?id=<?= $post->id ?>">
+                        <button class="btn btn-warning">Editieren</button>
+                    </a>
                     <button class="btn btn-danger" onclick="confirmDelete()">Löschen</button>
                 </div>
                 <hr>
@@ -59,24 +62,22 @@
                 // Name von Author des Kommentars evaluieren
                 $comment_user_id = $comment->user_id;
                 $userRepository = new \App\Repository\UserRepository();
-                $user_name = $userRepository->readById($comment_user_id)->username;
-
+                $full_name = $userRepository->readById($comment_user_id)->first_name . " " . $userRepository->readById($comment_user_id)->last_name;
                 ?>
-                <p><?=$comment->text ?></p>
-                <p><?=$user_name.'<i>'.$created_at.'</i>'?> </p>
-                <?php
 
+                <p><?= $comment->text ?></p>
+                <p><?= "<strong>$full_name</strong> <i>$created_at</i>" ?></p>
+
+                <?php
                 $replyRepository = new \App\Repository\ReplyRepository();
                 $replies = $replyRepository->getAllRepliesForCommentID($comment->id);
                 ?>
                 <?php if (count($replies) == 0): ?>
-                <hr class="noReply">
+                    <hr>
                 <?php endif; ?>
                 <div>
 
-
-
-                    <?php foreach ($replies as $reply):?>
+                    <?php foreach ($replies as $reply): ?>
                         <?php
                         // Zeitformat umwandeln
                         $reply_created_at = DateTime::createFromFormat('Y-m-d H:i:s', $reply->created_at);
@@ -84,13 +85,12 @@
 
                         // Name von Author des Kommentars evaluieren
                         $reply_user_id = $reply->user_id;
-                        $reply_user_name = $userRepository->readById($reply_user_id)->username;
-
+                        $reply_user_name = $userRepository->readById($reply_user_id)->first_name . " " . $userRepository->readById($reply_user_id)->last_name;
                         ?>
-                        <div class="pl-5 bl-1">
+                        <div class="reply pl-2 ml-5">
                             <p><?= $reply->text ?></p>
-                            <p><?php echo "$reply_user_name <i>$reply_created_at</i>"?></p>
-                            <hr style="border: 1px dashed rgba(0,0,0,.1)">
+                            <p><?= "<strong>$reply_user_name</strong> <i>$reply_created_at</i>" ?></p>
+                            <hr style="border: 1px dashed rgba(0,0,0,0.5)">
                         </div>
                     <?php endforeach; ?>
 
