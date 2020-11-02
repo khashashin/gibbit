@@ -42,10 +42,10 @@ class UserController
                 exit();
             }
 
-            $username = $_POST['username'];
-            $first_name = $_POST['fname'];
-            $last_name = $_POST['lname'];
-            $email = $_POST['email'];
+            htmlspecialchars($username = $_POST['username']);
+            htmlspecialchars($first_name = $_POST['fname']);
+            htmlspecialchars($last_name = $_POST['lname']);
+            htmlspecialchars($email = $_POST['email']);
             $password = ($_POST['password']);
             $passwordRepeat = $_POST['passwordRepeat'];
 
