@@ -4,6 +4,8 @@
             <h1 class="h5"><?= $post->title ?></h1>
             <hr>
             <p><?= $post->text ?></p>
+            <p><strong><?= $user->first_name . " " . $user->last_name?></strong><br>
+                <i><?= $post->created_at ?></i></p>
             <?php if($is_post_owner):?>
             <div class="btn-group">
                 <script type="application/javascript">
