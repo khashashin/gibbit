@@ -59,7 +59,7 @@
                             <button class="btn btn-success profile-submit" type="submit">Änderungen speichern</button>
                         </form>
                     </li>
-                    <li class="list-group-item"><a href="#">Account löschen</a></li>
+                    <li class="list-group-item"><a href="/user/deleteUser" onclick="return confirm('Möchtest du deinen Account wirklich löschen?')">Account löschen</a></li>
                 </ul>
             </div>
         </div>
