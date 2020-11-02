@@ -53,10 +53,10 @@ class UserController
                 exit();
             }
 
-            htmlspecialchars($username = $_POST['username']);
-            htmlspecialchars($first_name = $_POST['fname']);
-            htmlspecialchars($last_name = $_POST['lname']);
-            htmlspecialchars($email = $_POST['email']);
+            $username = htmlspecialchars($_POST['username']);
+            $first_name = htmlspecialchars($_POST['fname']);
+            $last_name = htmlspecialchars($_POST['lname']);
+            $email = htmlspecialchars($_POST['email']);
             $password = ($_POST['password']);
             $passwordRepeat = $_POST['passwordRepeat'];
 
@@ -97,6 +97,24 @@ class UserController
             }
         } else {
             header('Location: /user/index?error=Falscher Benutzername'); // Weiterleitung zur Anmeldung mit Error
+        }
+    }
+
+    public function updateUsername()
+    {
+        if (isset($_POST)) {
+            if(!(isset($_POST['username']) && isset($_POST['userid']) && !empty($_POST['username']) && !empty($_POST['userid']))) {
+                header('Location: /user/profile');
+            }
+
+            $username = htmlspecialchars($_POST['username']);
+            $userRepository = new UserRepository();
+            $userRepository->updateUsername($username, $_POST['userid']);
+
+        } else {
+            // Anfrage an die URI /user/create weiterleiten (HTTP 302)
+            header('Location: /user/profile');
+            exit();
         }
     }
 
