@@ -94,7 +94,11 @@ class ReplyRepository extends Repository
             echo "Permission denied";
         }
     }
-
+    /**
+     * Returnt alle Replies die zu einer Kommentar ID gehören aus dem Table "reply"
+     *
+     * @param $commentID Wert für die Spalte comment_id
+     */
     public function getAllRepliesForCommentID($commentID)
     {
         $query = "SELECT * FROM {$this->tableName} WHERE comment_id = $commentID";

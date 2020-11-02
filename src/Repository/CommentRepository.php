@@ -116,6 +116,12 @@ class CommentRepository extends Repository
         }
     }
 
+
+    /**
+     * Returnt alle Kommentare die zu einer Post ID gehören aus dem Table "reply"
+     *
+     * @param $postID Wert für die Spalte post_id
+     */
     public function getAllCommentsForPostID($postID)
     {
         $query = "SELECT * FROM {$this->tableName} WHERE post_id = $postID";
