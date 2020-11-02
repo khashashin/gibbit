@@ -1,17 +1,15 @@
 </main>
 
-<footer class="footer">
-    <div class="container">
-        <div class="footer-content">
-            <span class="text-muted footer-title">gibbit</span>
-<!--            <ul class="footer-links">-->
-<!--                <li><i class="fa fa-github"></i> GitHub</li>-->
-<!--                <li><i class="fa fa-window-maximize"></i> Website</li>-->
-<!--                <li><i class="fa fa-twitter"></i> Twitter</li>-->
-<!--            </ul>-->
-            <p>&copy; gibbit <?= date("Y"); ?></p>
-            <a class="link-github" href="https://github.com/khashashin/gibbit" target="_blank"><i class="fa fa-lg fa-github-square"></i> GitHub</a>
-            <a class="link-twitter" href="https://twitter.com/khashashin?lang=de" target="_blank"><i class="fa fa-lg fa-twitter-square"></i> Twitter</a>
+<footer class="footer w-100 bg-dark text-light">
+    <div class="container h-100">
+        <div class="row h-100">
+            <div class="col-12 d-flex justify-content-around align-items-center">
+                <span class="footer-title">gibbit</span>
+                <p class="m-0">&copy; gibbit <?= date("Y"); ?></p>
+                <a class="link-github" href="https://github.com/khashashin/gibbit" target="_blank">
+                    <i class="fa fa-lg fa-github-square"></i> GitHub</a>
+                <a class="link-twitter" href="https://twitter.com/khashashin?lang=de" target="_blank">
+                    <i class="fa fa-lg fa-twitter-square"></i> Twitter</a>
             </div>
         </div>
     </div>
