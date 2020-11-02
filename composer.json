@@ -1,6 +1,24 @@
 {
-  "name": "bbc/mvc",
-  "description": "PHP mvc der bbcag.ch",
+  "name": "bbc/gibbit",
+  "description": "Communication Platform - school project. Created during the Course 307",
+  "homepage": "https://gibbit.ch",
+  "readme": "./README.md",
+  "authors": [
+    {
+      "name": "Yusuf Khasbulatov",
+      "email": "khashashin@gmail.com",
+      "homepage": "https://khas.dev",
+      "role": "Developer"
+    },
+    {
+      "name": "Franz Kilchenmann",
+      "role": "Developer"
+    },
+    {
+      "name": "Janis Christen",
+      "role": "Developer"
+    }
+  ],
   "type": "project",
   "minimum-stability": "dev",
   "require": {},
@@ -8,5 +26,9 @@
     "psr-4": {
       "App\\":"src/"
     }
+  },
+  "license": "MIT",
+  "support": {
+    "issues": "https://github.com/khashashin/gibbit/issues"
   }
 }
