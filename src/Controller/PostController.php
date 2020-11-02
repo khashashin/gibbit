@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 
+use App\Repository\CommentRepository;
 use App\Repository\PostRepository;
 use App\Repository\UserRepository;
 use App\View\View;
@@ -19,6 +20,8 @@ class PostController
     public function __construct() {
         $this->postRepository = new PostRepository();
         $this->userRepository = new UserRepository();
+        $this->commentRepository = new CommentRepository();
+
     }
 
     /**
@@ -46,6 +49,8 @@ class PostController
         }
         $user = $this->userRepository->readById($post->user_id);
 
+        $comments = $this->commentRepository->getAllCommentsForPostID($_GET['id']);
+
         // Prüfe ob den Benutzer der Postinhaber ist.
         $is_post_owner = false;
         if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
@@ -60,6 +65,16 @@ class PostController
         $view->user = $user;
         $view->similar_posts = $similar_posts;
         $view->is_post_owner = $is_post_owner;
+
+        if (empty($comments))
+        {
+            $view->comments = null;
+        }
+        else
+        {
+            $view->comments = $comments;
+        }
+
         $view->display();
     }
 
@@ -80,6 +95,7 @@ class PostController
      */
     public function create() {
         session_start();
+
         if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
             $view = new View('post/create');
             $view->title = 'Post erstellen';

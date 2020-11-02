@@ -1,8 +1,10 @@
 <?php
 
-namespace App\CommentRepository;
+namespace App\Repository;
 
 use App\Repository\Repository;
+use App\Database\ConnectionHandler;
+use Exception;
 
 /**
  * Das UserRepository ist zuständig für alle Zugriffe auf die Tabelle "comment".
@@ -69,7 +71,6 @@ class CommentRepository extends Repository
      */
     public function change($text, $id)
     {
-        session_start();
         if(isset($_SESSION['isLoggedIn']))
         {
             if(isset($text)) {
@@ -103,9 +104,8 @@ class CommentRepository extends Repository
      *
      * @throws Exception falls das Ausführen des Statements fehlschlägt
      */
-    public function DELET($user_id, $id )
+    public function delete($user_id, $id )
     {
-        session_start();
         if(isset($_SESSION['isLoggedIn']))
         {
             $query = "";
@@ -114,6 +114,22 @@ class CommentRepository extends Repository
         {
             echo "Permission denied";
         }
+    }
+
+    public function getAllCommentsForPostID($postID)
+    {
+        $query = "SELECT * FROM $this->tableName WHERE post_id = $postID";
+
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->bind_param('i', $postID);
+
+        $result = $statement->get_result();
+        if (!$result) {
+            throw new Exception($statement->error);
+        }
+        $comments = $result->fetch_all();
+
+        return $comments;
     }
 
 }

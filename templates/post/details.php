@@ -45,6 +45,14 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-12 col-sm-8">
+            <h2 class="h4">Kommentare</h2>
+            <hr>
+
+
+        </div>
+    </div>
 </article>
 
 
