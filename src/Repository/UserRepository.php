@@ -101,6 +101,21 @@ class UserRepository extends Repository
             throw new Exception($statement->error);
         }
 
+        $_SESSION['username'] = htmlspecialchars($username);
+
         header('Location: /user/profile');
+    }
+
+    public function resetPassword($userid, $password)
+    {
+        $query = "UPDATE $this->tableName SET password = ? WHERE id = ?";
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->bind_param('si', $password, $userid);
+
+        if (!$statement->execute()) {
+            throw new Exception($statement->error);
+        }
+
+        header('Location: /user/logout');
     }
 }

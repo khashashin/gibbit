@@ -53,8 +53,8 @@ class PostRepository extends Repository
         if (!$statement->execute()) {
             throw new Exception($statement->error);
         }
-        // Weiterleiten auf geupdateten Post -- NEEDS FIX
-        header('Location: /post/details/?id=' . $statement->insert_id);
+        // Weiterleiten auf geupdateten Post
+        header('Location: /post/details/?id=' . $post_id);
 
     }
 
@@ -66,7 +66,11 @@ class PostRepository extends Repository
      * @throws Exception falls das Ausführen des Statements fehlschlägt
      *
      */
-    public function getAllPostsByUser(int $user_id) {
+    public function getAllPostsByUser($user_id) {
+
+        if(empty($user_id)) {
+            return false;
+        }
 
         $query = "SELECT * FROM {$this->tableName} WHERE user_id=?";
         $statement = ConnectionHandler::getConnection()->prepare($query);
@@ -104,6 +108,39 @@ class PostRepository extends Repository
     public function getRandomPosts($max = 4) {
 
         $query = "SELECT * FROM {$this->tableName} ORDER BY RAND() LIMIT 0, $max";
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->execute();
+
+        $result = $statement->get_result();
+        if (!$result) {
+            throw new Exception($statement->error);
+        }
+
+        // Datensätze aus dem Resultat holen und in das Array $rows speichern
+        $rows = array();
+        while ($row = $result->fetch_object()) {
+            $rows[] = $row;
+        }
+
+        return $rows;
+
+    }
+
+    /**
+     * Schick begrenztne Anzahl der Posts.
+     *
+     * @param int $page Ab welche index soll die Datensätze zurückgeschickt werden
+     *
+     * @throws Exception falls das Ausführen des Statements fehlschlägt
+     *
+     */
+    public function getByOffset(int $page = 1) {
+
+        $no_of_records_per_page = 5;
+        $offset = ($page-1) * $no_of_records_per_page;
+
+        $query = "SELECT * FROM {$this->tableName} LIMIT $offset, $no_of_records_per_page";
+
         $statement = ConnectionHandler::getConnection()->prepare($query);
         $statement->execute();
 

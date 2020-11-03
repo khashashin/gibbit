@@ -3,7 +3,7 @@
     <?php if (isset($_GET['error'])): ?>
         <div class="error">
             <h2>Fehler:</h2>
-            <p><?= $_GET['error'] ?></p>
+            <p><?= htmlspecialchars($_GET['error']); ?></p>
         </div>
     <?php endif; ?>
 
@@ -29,11 +29,11 @@
             </div>
             <div class="form-group">
                 <label class="control-label" for="password">Passwort</label>
-                <input id="password" name="password" type="password" class="form-control" required>
+                <input id="password" name="password" type="password" autocomplete="off" class="form-control" required>
             </div>
             <div class="form-group">
                 <label class="control-label" for="password">Passwort wiederholen</label>
-                <input id="passwordRepeat" name="passwordRepeat" type="password" class="form-control" required>
+                <input id="passwordRepeat" name="passwordRepeat" type="password" autocomplete="off" class="form-control" required>
             </div>
             <button type="submit" name="send" class="btn btn-primary btn-block">Registrieren</button>
         </form>
