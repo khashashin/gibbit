@@ -30,9 +30,16 @@ class UserController
         $view->display();
     }
 
+    /**
+     * Profil ist die Übersicht des Benutzers über sein Profil
+     * Hier kann er Benutzername und Passwort ändern sowie seinen Account löschen.
+     * Diese Übersicht wird mit dieser Methode angezgit
+     */
     public function profile()
     {
         session_start();
+
+        //Falls der Benutzer eingeloggt ist funktioniert es, ansonsten bekomment er einen Fehler
         if($_SESSION['isLoggedIn'] && $_SESSION['userid']) {
             $view = new View('user/profile');
             $view->title = 'Profil';
@@ -47,34 +54,40 @@ class UserController
      */
     public function doCreate()
     {
-        if (isset($_POST)) {
-
-            if($this->is_valid_user($_POST['username'], $_POST['password'], $_POST['fname'], $_POST['lname'], $_POST['email'])) {
-                exit();
-            }
-
-            $username = htmlspecialchars($_POST['username']);
-            $first_name = htmlspecialchars($_POST['fname']);
-            $last_name = htmlspecialchars($_POST['lname']);
-            $email = htmlspecialchars($_POST['email']);
-            $password = ($_POST['password']);
-            $passwordRepeat = $_POST['passwordRepeat'];
-
-            if($password !== $passwordRepeat) {
-                header('Location: /user/create?error=Passwörter stimmen nicht überein'); // Mit Fehler returnen falls die Passwörter nicht übereinstimmen
-                exit();
-            } else {
-                $password = hash('sha256', $password);
-            }
-
-            $userRepository = new UserRepository();
-            $userRepository->create($username, $first_name, $last_name, $email, $password);
-            header('Location: /user/index');
-        } else {
-            // Anfrage an die URI /user/create weiterleiten (HTTP 302)
-            header('Location: /user/create');
+        if (!isset($_POST)) {
+            // Fehler ausgeben, da das $_POST Array nicht gesetzt ist
+            header('Location: /user/create/?error=Etwas ist schiefgelaufen. Bitte versuche es erneut.');
             exit();
         }
+
+        // Überprüfen ob die Angaben im Formular gültig sind
+        if(!($this->is_valid_user($_POST['username'], $_POST['password'], $_POST['fname'], $_POST['lname'], $_POST['email']))) {
+            // Keine header-Weiterleitung, da diese bereits in der Methode is_valid_user gemacht wird
+            // Deshalb nur zur Sicherheit ein Exit.
+            exit();
+        }
+
+        // Durch htmlspecialchars XSS verhindern
+        $username = htmlspecialchars($_POST['username']);
+        $first_name = htmlspecialchars($_POST['fname']);
+        $last_name = htmlspecialchars($_POST['lname']);
+        $email = htmlspecialchars($_POST['email']);
+        $password = ($_POST['password']);
+        $passwordRepeat = $_POST['passwordRepeat'];
+
+        // Überprüfen ob die Passwort übereinstimmen, sonst Fehler werfen
+        if($password !== $passwordRepeat) {
+            header('Location: /user/create?error=Passwörter stimmen nicht überein'); // Mit Fehler returnen falls die Passwörter nicht übereinstimmen
+            exit();
+        } else {
+            // Passwort hashen, falls sie übereinstimmen
+            $password = hash('sha256', $password);
+        }
+
+        $userRepository = new UserRepository();
+        // Benutzer in der Datenbank erstellen
+        $userRepository->create($username, $first_name, $last_name, $email, $password);
+        header('Location: /user/index');
     }
 
     /**
@@ -84,49 +97,57 @@ class UserController
     {
         session_start();
         $userRepository = new UserRepository();
-        if ($userRepository->readByUsername($_POST['username'])) {
-            $user = $userRepository->readByUsername($_POST['username']);
-            $password = $user->password;
-            if (hash('sha256',$_POST['password']) == $password) {
-                $_SESSION['userid'] = $user->id; // Session Variable setzen (User ID)
-                $_SESSION['username'] = $user->username; // Session Variable setzen (Username)
-                $_SESSION['isLoggedIn'] = true; // Session Variable setzen (Boolean LoggedIn)
-                header('Location: /');
-            } else {
-                header('Location: /user/index/?error=Falsches Passwort'); // Weiterleitung zur Anmeldung mit Error
-            }
-        } else {
+        if (!$userRepository->readByUsername($_POST['username'])) {
             header('Location: /user/index/?error=Falscher Benutzername'); // Weiterleitung zur Anmeldung mit Error
+        }
+
+        // Benutzer Objekt erstellen
+        $user = $userRepository->readByUsername($_POST['username']);
+        $password = $user->password;
+
+        // Wenn das Passwort mit dem aus der DB übereinstimmt werden die Session Variablen gesetzt, sonst mit Fehler weitergeleitet
+        if (hash('sha256',$_POST['password']) == $password) {
+            $_SESSION['userid'] = $user->id; // Session Variable setzen (User ID)
+            $_SESSION['username'] = $user->username; // Session Variable setzen (Username)
+            $_SESSION['isLoggedIn'] = true; // Session Variable setzen (Boolean LoggedIn)
+            header('Location: /');
+        } else {
+            header('Location: /user/index/?error=Falsches Passwort'); // Weiterleitung zur Anmeldung mit Error
         }
     }
 
     /**
-     * Updates the username
+     * Ändern den Benutzernamen eines Users
      * @throws \Exception
      */
     public function updateUsername()
     {
         session_start();
+
+        //Falls der Benutzer eingeloggt ist funktioniert es, ansonsten bekomment er einen Fehler
         if($_SESSION['isLoggedIn'] && $_SESSION['userid']) {
-            if (isset($_POST)) {
-                if($_POST['userid'] == $_SESSION['userid']) {
-                    if (!(isset($_POST['username']) && isset($_POST['userid']) && !empty($_POST['username']) && !empty($_POST['userid']))) {
-                        header('Location: /user/profile');
-                    }
 
-                    $username = htmlspecialchars($_POST['username']);
-                    $userRepository = new UserRepository();
-                    $userRepository->updateUsername($username, $_POST['userid']);
+        if (!isset($_POST)) {
+            // Fehler ausgeben, da das $_POST Array nicht gesetzt ist
+            header('Location: /user/create/?error=Etwas ist schiefgelaufen. Bitte versuche es erneut.');
+            exit();
+        }
 
-                } else {
-                    header('Location: /user/profile');
-                    exit();
-                }
-            } else {
-                // Anfrage an die URI /user/create weiterleiten (HTTP 302)
+        // Wenn die Userid stimmt
+        if($_POST['userid'] == $_SESSION['userid']) {
+            if (!(isset($_POST['username']) && isset($_POST['userid']) && !empty($_POST['username']) && !empty($_POST['userid']))) {
                 header('Location: /user/profile');
-                exit();
             }
+            // Durch htmlspecialchars XSS verhindern
+            $username = htmlspecialchars($_POST['username']);
+            $userRepository = new UserRepository();
+            $userRepository->updateUsername($username, $_POST['userid']);
+
+        } else {
+            header('Location: /user/profile/?error=Ein unbekannnter Fehler ist aufgetreten');
+            exit();
+        }
+
         } else {
             header('Location: /user/index/?error=Du musst eingeloggt sein, um deinen Account löschen zu können!');
         }
@@ -183,10 +204,17 @@ class UserController
         }
     }
 
+    /**
+     * Löscht einen User aus der Datenbank und zerstört die Session
+     * @throws \Exception
+     */
     public function deleteUser()
     {
         session_start();
+
+        //Falls der Benutzer eingeloggt ist funktioniert es, ansonsten bekomment er einen Fehler
         if($_SESSION['isLoggedIn'] && $_SESSION['userid']) {
+            // Der User wird ausgeloggt und die Session destroyt
             $userRepository = new UserRepository();
             $userRepository->deleteById($_SESSION['userid']);
             unset($_SESSION);
