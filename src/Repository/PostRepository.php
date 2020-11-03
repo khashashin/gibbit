@@ -54,7 +54,7 @@ class PostRepository extends Repository
             throw new Exception($statement->error);
         }
         // Weiterleiten auf geupdateten Post -- NEEDS FIX
-        header('Location: /post/details/?id=' . $statement->insert_id);
+        header('Location: /post/details/?id=' . $post_id);
 
     }
 
