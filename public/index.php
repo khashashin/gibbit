@@ -14,5 +14,7 @@ require_once __DIR__.'/../vendor/autoload.php';
 use App\Dispatcher\Dispatcher;
 use App\Exception\ExceptionListener;
 
+error_reporting(E_ALL & ~E_NOTICE);
+
 ExceptionListener::register();
 Dispatcher::dispatch();

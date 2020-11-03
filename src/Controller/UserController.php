@@ -246,7 +246,7 @@ class UserController
 
         // Eingabe validieren
         if(isset($username) && isset($first_name) && isset($last_name) && isset($email)) {
-            if(!empty($username) && !empty($first_name) && !empty($last_name) && !isset($email)) {
+            if(!empty($username) && !empty($first_name) && !empty($last_name) && !empty($email)) {
                 return true;
             } else {
                 header('/user/create?error=Bitte lasse keine Eingabe leer'); // Mit Fehler returnen, dass Werte leer waren
