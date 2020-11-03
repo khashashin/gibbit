@@ -31,20 +31,7 @@ class CommentRepository extends Repository
      */
     public function create($user_id, $text, $post_id)
     {
-
-            if(isset($text)) {
-                if(!empty($text)) {
-                    // Verhindert XSS
-                    htmlspecialchars($text);
-                } else {
-                    header('/comment/create?error=Bitte lasse die Eingabe nicht leer'); // Mit Fehler returnen, dass Werte leer waren
-                }
-            } else {
-                header('/comment/create?error=Bitte gib einen Text ein'); // Mit Fehler returnen, dass Werte fehlen
-            }
-
-            $query = "INSERT INTO $this->tableName ($user_id, $text, $post_id) VALUES (?, ?, ?)";
-
+            $query = "INSERT INTO {$this->tableName} (user_id, text, post_id) VALUES (?, ?, ?)";
             $statement = ConnectionHandler::getConnection()->prepare($query);
             $statement->bind_param('isi', $user_id, $text, $post_id);
 
@@ -53,46 +40,9 @@ class CommentRepository extends Repository
                 throw new Exception($statement->error);
             }
 
-            return $statement->insert_id;
+            // Weiterleiten auf Post details Seite mit Kommentar
+            header('Location: /post/details/?id=' . $post_id);
 
-
-
-    }
-
-    /**
-     * Aendert einen Kommentar mit den gegebenen Werten.
-     *.
-     *
-     * @param $user_id Wert für die Spalte user_id
-     * @param $text Wert für die Spalte text
-     * @param $id Wert für die Spalte id
-     *
-     * @throws Exception falls das Ausführen des Statements fehlschlägt
-     */
-    public function change($text, $id)
-    {
-        if(isset($_SESSION['isLoggedIn']))
-        {
-            if(isset($text)) {
-                if(!empty($text)) {
-                    // Verhindert XSS
-                    htmlspecialchars($text);
-                } else {
-                    header('/comment/change?error=Du kannst keinen Leeren Kommentar posten'); // Mit Fehler returnen, dass Werte leer waren
-                }
-            } else {
-                header('/comment/change?error=Bitte gib einen Text ein'); // Mit Fehler returnen, dass Werte fehlen
-            }
-
-            $query = "UPDATE $this->tableName SET text = $text WHERE id = $id";
-
-            $statement = ConnectionHandler::getConnection()->prepare($query);
-            $statement->bind_param('si', $text, $id);
-        }
-        else
-        {
-            echo "Permission denied";
-        }
     }
 
     /**
@@ -114,6 +64,28 @@ class CommentRepository extends Repository
         {
             echo "Permission denied";
         }
+    }
+
+    /**
+     * Aktualisiert einen Post mit den gegebenen Werten.
+     *
+     * @param int $post_id Wert für die Spalte title
+     * @param string $title Wert für die Spalte title
+     * @param string $text Wert für die Spalte text
+     *
+     * @throws Exception falls das Ausführen des Statements fehlschlägt
+     *
+     */
+    public function update($post_id, $comment_id, $text) {
+        $query = "UPDATE $this->tableName SET text = ? WHERE id = ?";
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->bind_param('si',  $text, $comment_id);
+        if (!$statement->execute()) {
+            throw new Exception($statement->error);
+        }
+        // Weiterleiten auf geupdateten Post -- NEEDS FIX
+        header('Location: /post/details/?id=' . $post_id);
+
     }
 
 
