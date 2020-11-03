@@ -30,17 +30,19 @@ class PostController
      * Index wird als Übersicht von alle Posts verwendet
      */
     public function index() {
-        // Holen der aktuellen seite nummer
+        // Holen der aktuellen Seitennummer
         if (isset($_GET['page'])) {
             $page = $_GET['page'];
         } else {
             $page = 1;
         }
+        // Seitenanzahl berechnen
         $total_pages = count($this->postRepository->readAll()) / 5;
         if ($page > $total_pages) {
             $page = $total_pages;
         }
 
+        // View rendern
         $view = new View('post/index');
         $view->title = 'Posts';
         $view->posts = $this->postRepository->getByOffset($page);
@@ -53,12 +55,11 @@ class PostController
      * Details wird als Detail Seite für einzelne Posts verwendet
      */
     public function details() {
+
         session_start();
         $post = $this->postRepository->readById($_GET['id']);
         $similar_posts = $this->postRepository->getRandomPosts();
         $user = $this->userRepository->readById($post->user_id);
-
-
         $comments = $this->commentRepository->getAllCommentsForPostID($_GET['id']);
 
 
@@ -69,7 +70,10 @@ class PostController
                 $is_post_owner = true;
             }
         }
+
+        // View rendern
         $view = new View('post/details');
+        // Seitentitel (oben in der Leiste) wird jeweils der Posttitel
         $view->title = $post->title;
         $view->post = $post;
         $view->user = $user;
@@ -97,6 +101,7 @@ class PostController
     public function create() {
         session_start();
 
+        // Falls der Benutzer eingeloggt ist wird ihm die Create View angezeigt, ansonsten ein Fehler
         if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
             $view = new View('post/create');
             $view->title = 'Post erstellen';
@@ -108,9 +113,12 @@ class PostController
 
     /**
      * Zeigt die View um einen post zu editieren
+     * Dazu wird die Methode readById vom DefaultController verwendet
      */
     public function edit() {
         session_start();
+
+        // Falls der Benutzer eingeloggt ist wird ihm die Edit View angezeigt, ansonsten ein Fehler
         if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
             $post = $this->postRepository->readById($_GET['id']);
             $view = new View('post/edit');
@@ -123,10 +131,13 @@ class PostController
     }
 
     /**
-     * Zeit die View um einen Post zu löschen
+     * Löscht einen Post via PostRepository und zeigt anschliessend eine Bestätigungsmeldung
+     * Zum Löschen wird die Methode deleteById vom DefaultController verwendet
      */
     public function delete() {
         session_start();
+
+        //Falls der Benutzer eingeloggt ist funktioniert es, ansonsten bekomment er einen Fehler
         if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
             $this->postRepository->deleteById($_GET['id']);
             $view = new View('post/delete');
@@ -142,12 +153,15 @@ class PostController
      */
     public function doCreate() {
         session_start();
+
+        //Falls der Benutzer eingeloggt ist funktioniert es, ansonsten bekomment er einen Fehler
         if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
             if (isset($_POST)) {
                 if(!$this->post_is_valid($_POST['title'], $_POST['text'])) {
                     header('Location: /post/create');
                     exit();
                 }
+                // Durch htmlspecialchars XSS verhindern
                 $title = htmlspecialchars($_POST['title']);
                 $text = htmlspecialchars($_POST['text']);
                 $this->postRepository->create($title, $text);
@@ -162,12 +176,15 @@ class PostController
      */
     public function doUpdate() {
         session_start();
+
+        //Falls der Benutzer eingeloggt ist funktioniert es, ansonsten bekomment er einen Fehler
         if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
             if (isset($_POST)) {
                 if(!$this->update_is_valid($_POST['post_id'], $_POST['title'], $_POST['text'])) {
                     header('Location: /post/index');
                     exit();
                 }
+                // Durch htmlspecialchars XSS verhindern
                 $title = htmlspecialchars($_POST['title']);
                 $text = htmlspecialchars($_POST['text']);
                 $post_id = $_POST['post_id'];
@@ -179,7 +196,9 @@ class PostController
     }
 
     /**
-     * Validiert, ob ein Post weder ungesetzt noch leer ist
+     * Validiert, ob ein Post weder ungesetzt noch leer ist.
+     * true = Postargumente sind valid
+     * false = Postargumente sind invalid
      * @param $title
      * @param $text
      * @return bool
@@ -189,28 +208,23 @@ class PostController
         session_start();
 
         // Überprüfen ob der Nutzer eingeloggt ist
-        if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['userid'])) {
-
-            // Eingabe validieren (Werte sind gesetzt)
-            if (isset($title) && isset($text)) {
-
-                // Eingabe validieren (Werte sind nicht leer)
-                if (!empty($title) && !empty($text)) {
-                    return true;
-                } else {
-                    header('/post/create?error=Bitte lasse keine Eingabe leer'); // Mit Fehler returnen, dass Werte leer waren
-                    return false;
-                }
-
-            } else {
-                header('/post/create?error=Bitte gib überall einen Wert an'); // Mit Fehler returnen, dass Werte fehlen
-                return false;
-            }
-
-        } else {
+        if (!(isset($_SESSION['isLoggedIn']) && !empty($_SESSION['userid']))) {
             header('Location: /user/login/?error=Bitte logge dich ein, um einen Post erstellen zu können!'); // Mit Fehler returnen, dass Nutzer nicht eingeloggt war
             return false;
         }
+
+        // Eingabe validieren (Werte sind gesetzt)
+        if (!(isset($title) && isset($text))) {
+            header('/post/create?error=Bitte gib überall einen Wert an'); // Mit Fehler returnen, dass Werte fehlen
+            return false;
+        }
+
+        // Eingabe validieren (Werte sind nicht leer)
+        if (!(!empty($title) && !empty($text))) {
+            header('/post/create?error=Bitte lasse keine Eingabe leer'); // Mit Fehler returnen, dass Werte leer waren
+            return false;
+        }
+        return true;
     }
 
     /**

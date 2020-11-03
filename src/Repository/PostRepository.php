@@ -53,7 +53,7 @@ class PostRepository extends Repository
         if (!$statement->execute()) {
             throw new Exception($statement->error);
         }
-        // Weiterleiten auf geupdateten Post -- NEEDS FIX
+        // Weiterleiten auf geupdateten Post
         header('Location: /post/details/?id=' . $post_id);
 
     }
