@@ -93,10 +93,10 @@ class UserController
                 $_SESSION['isLoggedIn'] = true; // Session Variable setzen (Boolean LoggedIn)
                 header('Location: /');
             } else {
-                header('Location: /user/index?error=Falsches Passwort'); // Weiterleitung zur Anmeldung mit Error
+                header('Location: /user/index/?error=Falsches Passwort'); // Weiterleitung zur Anmeldung mit Error
             }
         } else {
-            header('Location: /user/index?error=Falscher Benutzername'); // Weiterleitung zur Anmeldung mit Error
+            header('Location: /user/index/?error=Falscher Benutzername'); // Weiterleitung zur Anmeldung mit Error
         }
     }
 
@@ -132,6 +132,57 @@ class UserController
         }
     }
 
+    public function resetPassword()
+    {
+        session_start();
+        // Validierungen
+        if(!($_SESSION['isLoggedIn'] && $_SESSION['userid'])) {
+            header('Location: /user/index/?error=Du musst eingeloggt sein, um dein Passwort ändern zu können!');
+            exit();
+        }
+        if (!isset($_POST)) {
+            header('Location: /user/profile/?error=Ein unbekannter Fehler ist aufgetreten');
+            exit();
+        }
+        if(!($_POST['userid'] == $_SESSION['userid'])) {
+            header('Location: /user/profile/?error=Ein unbekannter Fehler ist aufgetreten. Bitte versuche, dich aus- und wieder einzuloggen.');
+            exit();
+        }
+        if (!(isset($_POST['currentPW']) && isset($_POST['newPW']) && isset($_POST['repeatedPW']) && isset($_POST['userid']))) {
+            header('Location: /user/profile?error=Bitte achte darauf, überall einen Wert abzugeben!');
+            exit();
+        }
+
+        if(!(!empty($_POST['currentPW']) && !empty($_POST['newPW']) && !empty($_POST['repeatedPW']) && !empty($_POST['userid']))) {
+            header('Location: /user/profile?error=Bitte achte darauf, keine leeren Angaben zu machen!');
+            exit();
+        }
+
+        $current_pw = $_POST['currentPW'];
+        $new_pw = $_POST['newPW'];
+        $repeated_new_pw = $_POST['repeatedPW'];
+        $userid = $_POST['userid'];
+
+        // Überprüfen ob die Angaben stimmen
+        if($new_pw !== $repeated_new_pw) {
+            header('Location: /user/profile/?error=Die Passwörter stimmen nicht überein!');
+            exit();
+        }
+
+        // Passwort aus Datenbank lesen
+        $userRepository = new UserRepository();
+        $curr_pw_from_db = $userRepository->readById($userid)->password;
+
+        // Wenn das Passwort stimmt -> Methode ausführen, ansonsten mit Fehler weiterleiten.
+        if (hash('sha256',$current_pw) == $curr_pw_from_db) {
+            $new_pw = hash('sha256', $new_pw);
+            $userRepository->resetPassword($userid, $new_pw);
+        } else {
+            header('Location: /user/profile/?error=Das aktuelle Passwort wurde falsch eingegeben');
+            exit();
+        }
+    }
+
     public function deleteUser()
     {
         session_start();
@@ -155,7 +206,7 @@ class UserController
         session_start();
         unset($_SESSION);
         session_destroy();
-        header('Location: /');
+        header('Location: /user/index/');
     }
 
     function is_valid_user($username, $password, $first_name, $last_name, $email) {

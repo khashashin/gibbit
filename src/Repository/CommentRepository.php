@@ -31,17 +31,17 @@ class CommentRepository extends Repository
      */
     public function create($user_id, $text, $post_id)
     {
-            $query = "INSERT INTO {$this->tableName} (user_id, text, post_id) VALUES (?, ?, ?)";
-            $statement = ConnectionHandler::getConnection()->prepare($query);
-            $statement->bind_param('isi', $user_id, $text, $post_id);
+        $query = "INSERT INTO {$this->tableName} (user_id, text, post_id) VALUES (?, ?, ?)";
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->bind_param('isi', $user_id, $text, $post_id);
 
-            if (!$statement->execute())
-            {
-                throw new Exception($statement->error);
-            }
+        if (!$statement->execute())
+        {
+            throw new Exception($statement->error);
+        }
 
-            // Weiterleiten auf Post details Seite mit Kommentar
-            header('Location: /post/details/?id=' . $post_id);
+        // Weiterleiten auf Post details Seite mit Kommentar
+        header('Location: /post/details/?id=' . $post_id);
 
     }
 

@@ -24,7 +24,6 @@ class PostController
         $this->userRepository = new UserRepository();
         $this->commentRepository = new CommentRepository();
         $this->replyRepository = new ReplyRepository();
-
     }
 
     /**
@@ -88,7 +87,7 @@ class PostController
      */
     public function user_posts()
     {
-        $posts = $this->postRepository->getAllPostsByUser($_GET['user_id']);
+        $posts = $this->postRepository->getAllPostsByUser(@$_GET['user_id']);
         $view = new View('post/user_posts');
         $view->title = 'Benutzer Posts';
         $view->posts = $posts;
@@ -107,7 +106,7 @@ class PostController
             $view->title = 'Post erstellen';
             $view->display();
         } else {
-            header('Location: /user/index?error=Du bist nicht eingeloggt!');
+            header('Location: /user/index/?error=Du bist nicht eingeloggt!');
         }
     }
 
@@ -124,7 +123,7 @@ class PostController
             $view->post = $post;
             $view->display();
         } else {
-            header('Location: /user/index?error=Du bist nicht eingeloggt!');
+            header('Location: /user/index/?error=Du bist nicht eingeloggt!');
         }
     }
 
@@ -187,7 +186,7 @@ class PostController
                 $this->postRepository->create($title, $text);
             }
         } else {
-            header('Location: /user/index?error=Du bist nicht eingeloggt!');
+            header('Location: /user/index/?error=Du bist nicht eingeloggt!');
         }
     }
 
@@ -209,7 +208,7 @@ class PostController
                 $this->postRepository->update($post_id, $title, $text);
             }
         } else {
-            header('Location: /user/index?error=Du bist nicht eingeloggt!');
+            header('Location: /user/index/?error=Du bist nicht eingeloggt!');
         }
     }
 
@@ -228,6 +227,7 @@ class PostController
             $this->commentRepository->create($_SESSION['userid'], $text, $post_id);
         }
     }
+
 
     /**
      * Zeigt die View um einen Kommentar zu editieren

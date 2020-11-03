@@ -1,4 +1,4 @@
-﻿drop table if exists `user`;
+drop table if exists `user`;
 create table `user`
 (
     id          integer unsigned not null auto_increment,
@@ -36,6 +36,7 @@ create table `post`
     is_approved boolean,
     primary key (id),
     foreign key (user_id) references user (id)
+        ON DELETE CASCADE
 );
 
 INSERT INTO `post` (`user_id`,`title`,`text`,`created_at`,`is_approved`) VALUES (22,"nisl. Maecenas malesuada fringilla est.","turpis. Nulla aliquet. Proin velit. Sed malesuada augue ut lacus. Nulla tincidunt, neque vitae semper egestas, urna justo faucibus lectus, a sollicitudin orci sem","2021-06-02 00:04:11",1),(39,"dui. Suspendisse ac metus vitae","quam, elementum at, egestas a, scelerisque sed, sapien. Nunc pulvinar arcu et pede. Nunc sed orci lobortis augue scelerisque mollis. Phasellus libero mauris, aliquam eu, accumsan sed, facilisis vitae, orci.","2019-11-19 01:27:13",1),(49,"sapien. Aenean massa.","est tempor bibendum. Donec felis orci, adipiscing non, luctus sit","2020-12-19 06:52:34",1),(16,"Morbi vehicula. Pellentesque tincidunt","Morbi metus. Vivamus euismod urna. Nullam lobortis quam a felis ullamcorper viverra. Maecenas iaculis aliquet diam. Sed diam lorem, auctor quis,","2020-02-13 20:00:49",1),(37,"Mauris non dui nec urna suscipit nonummy.","et malesuada fames ac turpis egestas. Aliquam fringilla cursus purus. Nullam scelerisque neque sed sem egestas blandit.","2021-02-18 13:58:53",1),(93,"Nam porttitor scelerisque","eget, volutpat ornare, facilisis eget, ipsum. Donec sollicitudin adipiscing ligula. Aenean gravida nunc sed pede. Cum sociis natoque penatibus et magnis dis parturient montes,","2021-10-17 01:40:44",1),(16,"eu augue porttitor interdum. Sed","augue malesuada malesuada. Integer id magna et ipsum cursus vestibulum. Mauris magna. Duis dignissim tempor","2020-11-09 11:22:13",1),(90,"pede sagittis augue, eu tempor erat","Integer tincidunt aliquam arcu. Aliquam ultrices iaculis odio. Nam interdum enim non nisi. Aenean eget metus. In","2021-04-25 02:17:32",1),(39,"inceptos hymenaeos. Mauris ut","cursus vestibulum. Mauris magna. Duis dignissim tempor arcu. Vestibulum ut eros non enim commodo","2020-11-20 21:51:21",1),(44,"sit amet, risus. Donec","a neque. Nullam ut nisi a odio semper cursus. Integer mollis. Integer tincidunt aliquam arcu. Aliquam ultrices iaculis odio. Nam interdum enim non nisi. Aenean eget metus. In","2020-06-10 00:44:46",1);
@@ -60,8 +61,10 @@ create table  `comment`
     is_approved boolean,
     post_id integer unsigned not null,
     primary key (id),
-    foreign key (user_id) references user (id),
+    foreign key (user_id) references user (id)
+        ON DELETE CASCADE,
     foreign key (post_id) references post (id)
+        ON DELETE CASCADE
 );
 
 INSERT INTO `comment` (`user_id`,`text`,`created_at`,`is_approved`,`post_id`) VALUES (91,"nec ante. Maecenas mi felis, adipiscing fringilla, porttitor vulputate, posuere vulputate, lacus. Cras interdum. Nunc sollicitudin commodo ipsum. Suspendisse non leo. Vivamus nibh dolor, nonummy ac, feugiat non, lobortis quis, pede. Suspendisse dui. Fusce diam nunc,","2021-09-09 09:41:29",1,25),(76,"semper auctor. Mauris vel turpis. Aliquam adipiscing lobortis risus. In mi pede, nonummy ut, molestie in, tempus eu, ligula. Aenean euismod mauris eu elit. Nulla facilisi. Sed neque.","2021-07-24 20:37:48",1,90),(93,"Cras dictum ultricies ligula. Nullam enim. Sed nulla ante, iaculis nec, eleifend non, dapibus rutrum,","2021-07-26 20:44:29",1,65),(7,"Nullam lobortis quam a felis ullamcorper viverra. Maecenas iaculis aliquet diam. Sed diam lorem, auctor","2020-01-06 21:52:49",1,65),(79,"tincidunt aliquam arcu. Aliquam ultrices iaculis odio. Nam interdum enim non nisi. Aenean eget metus. In nec orci. Donec nibh. Quisque","2020-06-11 02:00:36",1,78),(81,"Nunc laoreet lectus quis massa. Mauris vestibulum, neque sed dictum eleifend, nunc risus varius orci, in consequat enim diam vel arcu.","2020-08-14 15:55:05",1,69),(37,"rutrum urna, nec luctus felis purus ac tellus. Suspendisse sed dolor. Fusce mi lorem, vehicula et, rutrum eu, ultrices sit amet, risus. Donec nibh enim, gravida sit amet, dapibus id, blandit at, nisi.","2021-03-04 17:59:14",1,85),(16,"ut aliquam iaculis, lacus pede sagittis augue, eu tempor erat neque non quam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam fringilla cursus purus. Nullam scelerisque neque sed sem","2020-06-22 23:13:22",1,67),(92,"ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec tincidunt. Donec vitae erat vel pede blandit congue. In scelerisque scelerisque dui. Suspendisse ac metus vitae velit egestas lacinia.","2020-06-24 15:29:05",1,47),(32,"et malesuada fames ac turpis egestas. Aliquam fringilla cursus purus. Nullam scelerisque neque sed sem egestas blandit. Nam nulla magna,","2020-01-21 21:51:34",1,69);
@@ -86,8 +89,10 @@ create table `reply`
     is_approved boolean,
     comment_id integer unsigned not null,
     primary key (id),
-    foreign key (user_id) references user (id),
+    foreign key (user_id) references user (id)
+        ON DELETE CASCADE,
     foreign key (comment_id) references comment (id)
+        ON DELETE CASCADE
 );
 
 INSERT INTO `reply` (`user_id`,`text`,`created_at`,`is_approved`,`comment_id`) VALUES (42,"volutpat nunc sit amet metus. Aliquam erat volutpat. Nulla facilisis. Suspendisse commodo tincidunt nibh. Phasellus nulla. Integer vulputate,","2021-02-21 01:02:34",1,19),(99,"enim consequat purus. Maecenas libero est, congue a, aliquet vel, vulputate eu, odio. Phasellus at augue id ante dictum cursus. Nunc mauris elit, dictum eu, eleifend nec, malesuada ut, sem. Nulla interdum. Curabitur dictum.","2020-04-21 14:21:13",1,6),(18,"augue, eu tempor erat neque non quam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam","2021-05-31 21:38:53",1,98),(97,"eu neque pellentesque massa lobortis ultrices. Vivamus rhoncus. Donec est. Nunc ullamcorper, velit in aliquet lobortis, nisi nibh lacinia orci, consectetuer euismod est arcu ac orci.","2021-03-10 22:49:53",1,9),(90,"sed, facilisis vitae, orci. Phasellus dapibus quam quis diam. Pellentesque habitant morbi tristique senectus et netus et","2021-04-20 05:13:32",1,37),(79,"Nunc mauris elit, dictum eu, eleifend nec, malesuada ut, sem. Nulla interdum. Curabitur dictum. Phasellus in felis. Nulla tempor augue","2020-04-26 21:52:29",1,6),(86,"leo. Cras vehicula aliquet libero. Integer in magna. Phasellus dolor elit, pellentesque a, facilisis non, bibendum sed, est. Nunc laoreet lectus quis massa. Mauris vestibulum, neque sed dictum eleifend, nunc risus varius orci, in consequat enim diam","2020-02-21 17:15:26",1,32),(13,"Proin vel arcu eu odio tristique pharetra. Quisque ac libero nec ligula consectetuer rhoncus. Nullam velit dui, semper et, lacinia vitae, sodales at, velit. Pellentesque ultricies dignissim lacus. Aliquam rutrum lorem ac risus. Morbi metus. Vivamus euismod urna. Nullam lobortis","2020-12-08 21:50:00",1,68),(95,"aliquam, enim nec tempus scelerisque, lorem ipsum sodales purus, in molestie tortor nibh sit amet orci. Ut sagittis lobortis mauris. Suspendisse aliquet molestie tellus. Aenean egestas hendrerit neque. In ornare sagittis felis. Donec tempor, est ac mattis semper, dui lectus","2020-02-03 22:41:22",1,40),(55,"morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce aliquet magna a neque. Nullam ut nisi a odio semper cursus. Integer mollis.","2021-08-19 16:55:56",1,47);
