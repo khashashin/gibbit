@@ -102,7 +102,7 @@ class PostController
             $view->title = 'Post erstellen';
             $view->display();
         } else {
-            header('Location: /user/index?error=Du bist nicht eingeloggt!');
+            header('Location: /user/index/?error=Du bist nicht eingeloggt!');
         }
     }
 
@@ -118,7 +118,7 @@ class PostController
             $view->post = $post;
             $view->display();
         } else {
-            header('Location: /user/index?error=Du bist nicht eingeloggt!');
+            header('Location: /user/index/?error=Du bist nicht eingeloggt!');
         }
     }
 
@@ -133,7 +133,7 @@ class PostController
             $view->title = 'Post löschen';
             $view->display();
         } else {
-            header('Location: /user/index?error=Du bist nicht eingeloggt!');
+            header('Location: /user/index/?error=Du bist nicht eingeloggt!');
         }
     }
 
@@ -153,7 +153,7 @@ class PostController
                 $this->postRepository->create($title, $text);
             }
         } else {
-            header('Location: /user/index?error=Du bist nicht eingeloggt!');
+            header('Location: /user/index/?error=Du bist nicht eingeloggt!');
         }
     }
 
@@ -174,7 +174,7 @@ class PostController
                 $this->postRepository->update($post_id, $title, $text);
             }
         } else {
-            header('Location: /user/index?error=Du bist nicht eingeloggt!');
+            header('Location: /user/index/?error=Du bist nicht eingeloggt!');
         }
     }
 
