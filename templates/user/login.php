@@ -4,7 +4,7 @@
     <?php if(isset($_GET['error'])):  ?>
     <div class="error">
         <h2>Fehler:</h2>
-        <p><?= $_GET['error'] ?></p>
+        <p><?= htmlspecialchars($_GET['error']); ?></p>
     </div>
     <?php endif; ?>
 
