@@ -84,7 +84,7 @@ class PostController
      * User Posts wird als ein Übersicht auf alle Posts von bestimmte Benutzer verwendet
      */
     public function user_posts() {
-        $posts = $this->postRepository->getAllPostsByUser($_GET['user_id']);
+        $posts = $this->postRepository->getAllPostsByUser(@$_GET['user_id']);
         $view = new View('post/user_posts');
         $view->title = 'Benutzer Posts';
         $view->posts = $posts;
