@@ -40,11 +40,10 @@
                 </div>
                 <ul class="list-group list-group-flush">
                     <?php
+                    /* Temporär wird statische posts verwendet TODO: Get posts by similar tags (!not implemented yet)*/
                     foreach ($similar_posts as $similar_post): ?>
-                        <!-- Temporär wird statische posts verwendet
-                             TODO: Get posts by similar tags (!not implemented yet)-->
-                        <li class="list-group-item"><a
-                                    href="/post/details/?id=<?= $similar_post->id ?>"><?= $similar_post->title; ?></a>
+                        <li class="list-group-item">
+                            <a href="/post/details/?id=<?= $similar_post->id ?>"><?= $similar_post->title; ?></a>
                         </li>
                     <?php endforeach; ?>
                 </ul>
@@ -52,7 +51,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-12 col-sm-8">
+        <div class="col-12 col-sm-8 mb-4">
             <h2 class="h4">Kommentare</h2>
             <hr>
             <?php if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['userid'])): ?>
@@ -77,7 +76,7 @@
                 $full_name = $userRepository->readById($comment_user_id)->first_name . " " . $userRepository->readById($comment_user_id)->last_name;
                 ?>
                 <p><?= $comment->text ?></p>
-                <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center justify-content-between mb-3">
                     <p class="m-0"><?= "<strong>$full_name</strong> <i>$created_at</i>" ?></p>
 
 
@@ -98,7 +97,6 @@
                         <!--<button class="btn btn-sm btn-outline-warning">Editieren</button>-->
                         <button class="btn btn-sm btn-outline-danger" onclick="confirmCommentDelete(<?= $comment->id ?>)">Löschen</button>
                     <?php endif; ?>
-                        <button class="btn btn-sm btn-outline-secondary">Antworten</button>
                     </div>
 
                 </div>
@@ -128,7 +126,19 @@
                             <hr style="border: 1px dashed rgba(0,0,0,0.5)">
                         </div>
                     <?php endforeach; ?>
-
+                    <div>
+                        <form action="/post/doCreateReply" method="post" class="ml-5 needs-validation" novalidate>
+                            <div class="form-group">
+                                <label for="reply-text">Antwort</label>
+                                <textarea id="reply-text" name="text" rows="2" class="form-control" required></textarea>
+                            </div>
+                            <input type="hidden" name="post_id" value="<?= $comment->post_id ?>">
+                            <input type="hidden" name="comment_id" value="<?= $comment->id ?>">
+                            <div class="text-right">
+                                <button type="submit" class="btn btn-primary btn-sm">Antworten</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             <?php endforeach; ?>
 

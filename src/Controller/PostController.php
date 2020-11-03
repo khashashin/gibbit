@@ -289,6 +289,23 @@ class PostController
         }
     }
 
+    public function doCreateReply()
+    {
+        session_start();
+
+        if (isset($_POST)) {
+
+            if (!$this->validate_post_text($_POST['text'])) {
+                header('Location: /post/details/?id=' . $_POST['post_id']);
+                exit();
+            }
+            $text = htmlspecialchars($_POST['text']);
+            $post_id = $_POST['post_id'];
+            $comment_id = $_POST['comment_id'];
+            $this->replyRepository->create($_SESSION['userid'], $text, $comment_id, $post_id);
+        }
+    }
+
     /**
      * Validiert, ob ein Post weder ungesetzt noch leer ist
      * @param $title
@@ -398,5 +415,34 @@ class PostController
 
 
         return false;
+    }
+
+    public function validate_post_text($text) {
+        // Only logged in user cann post
+        session_start();
+
+        // Überprüfen ob der Nutzer eingeloggt ist
+        if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['userid'])) {
+
+            // Eingabe validieren (Werte sind gesetzt)
+            if (isset($text)) {
+
+                // Eingabe validieren (Werte sind nicht leer)
+                if (!empty($text)) {
+                    return true;
+                } else {
+                    header('/post/details?error=Bitte lasse keine Eingabe leer'); // Mit Fehler returnen, dass Werte leer waren
+                    return false;
+                }
+
+            } else {
+                header('/post/details?error=Bitte gib überall einen Wert an'); // Mit Fehler returnen, dass Werte fehlen
+                return false;
+            }
+
+        } else {
+            header('Location: /user/login/?error=Bitte logge dich ein, um einen Post erstellen zu können!'); // Mit Fehler returnen, dass Nutzer nicht eingeloggt war
+            return false;
+        }
     }
 }
