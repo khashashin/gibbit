@@ -31,29 +31,18 @@ class CommentRepository extends Repository
      */
     public function create($user_id, $text, $post_id)
     {
+        $query = "INSERT INTO {$this->tableName} (user_id, text, post_id) VALUES (?, ?, ?)";
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->bind_param('isi', $user_id, $text, $post_id);
 
-            if(isset($text)) {
-                if(!empty($text)) {
-                    // Verhindert XSS
-                    htmlspecialchars($text);
-                } else {
-                    header('/comment/create?error=Bitte lasse die Eingabe nicht leer'); // Mit Fehler returnen, dass Werte leer waren
-                }
-            } else {
-                header('/comment/create?error=Bitte gib einen Text ein'); // Mit Fehler returnen, dass Werte fehlen
-            }
+        if (!$statement->execute())
+        {
+            throw new Exception($statement->error);
+        }
 
-            $query = "INSERT INTO $this->tableName ($user_id, $text, $post_id) VALUES (?, ?, ?)";
+        // Weiterleiten auf Post details Seite mit Kommentar
+        header('Location: /post/details/?id=' . $post_id);
 
-            $statement = ConnectionHandler::getConnection()->prepare($query);
-            $statement->bind_param('isi', $user_id, $text, $post_id);
-
-            if (!$statement->execute())
-            {
-                throw new Exception($statement->error);
-            }
-
-            return $statement->insert_id;
     }
 
     /**
@@ -75,6 +64,28 @@ class CommentRepository extends Repository
         {
             echo "Permission denied";
         }
+    }
+
+    /**
+     * Aktualisiert einen Post mit den gegebenen Werten.
+     *
+     * @param int $post_id Wert für die Spalte title
+     * @param string $title Wert für die Spalte title
+     * @param string $text Wert für die Spalte text
+     *
+     * @throws Exception falls das Ausführen des Statements fehlschlägt
+     *
+     */
+    public function update($post_id, $comment_id, $text) {
+        $query = "UPDATE $this->tableName SET text = ? WHERE id = ?";
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->bind_param('si',  $text, $comment_id);
+        if (!$statement->execute()) {
+            throw new Exception($statement->error);
+        }
+        // Weiterleiten auf geupdateten Post -- NEEDS FIX
+        header('Location: /post/details/?id=' . $post_id);
+
     }
 
 
