@@ -93,10 +93,10 @@ class UserController
                 $_SESSION['isLoggedIn'] = true; // Session Variable setzen (Boolean LoggedIn)
                 header('Location: /');
             } else {
-                header('Location: /user/index?error=Falsches Passwort'); // Weiterleitung zur Anmeldung mit Error
+                header('Location: /user/index/?error=Falsches Passwort'); // Weiterleitung zur Anmeldung mit Error
             }
         } else {
-            header('Location: /user/index?error=Falscher Benutzername'); // Weiterleitung zur Anmeldung mit Error
+            header('Location: /user/index/?error=Falscher Benutzername'); // Weiterleitung zur Anmeldung mit Error
         }
     }
 

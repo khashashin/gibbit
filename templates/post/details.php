@@ -1,4 +1,4 @@
-<script type="application/javascript">
+<script>
     confirmDelete = () => {
         if (confirm('Möchten Sie wirklich den Post löschen?')) {
             window.location.href = "/post/delete/?id=<?= $post->id ?>";
