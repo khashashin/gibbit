@@ -101,6 +101,8 @@ class UserRepository extends Repository
             throw new Exception($statement->error);
         }
 
+        $_SESSION['username'] = htmlspecialchars($username);
+
         header('Location: /user/profile');
     }
 
