@@ -58,7 +58,12 @@ class PostController
     public function details()
     {
         session_start();
-        $post = $this->postRepository->readById($_GET['id']);
+        if(is_numeric($_GET['id'])) {
+            $post = $this->postRepository->readById($_GET['id']);
+        } else {
+            header('Location: /');
+            exit();
+        }
         $similar_posts = $this->postRepository->getRandomPosts();
         $user = $this->userRepository->readById($post->user_id);
         $comments = $this->commentRepository->getAllCommentsForPostID($_GET['id']);
