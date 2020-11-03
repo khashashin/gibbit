@@ -27,35 +27,22 @@ class ReplyRepository extends Repository
      * @param $user_id Wert für die Spalte user_id
      * @param $text Wert für die Spalte text
      * @param $comment_id Wert für die Spalte comment_id
+     * @param $post_id Wert um weiterzuleiten
      *
      * @throws Exception falls das Ausführen des Statements fehlschlägt
      */
-
-    public function create($user_id, $text, $comment_id)
+    public function create($user_id, $text, $comment_id, $post_id)
     {
-
-        if(isset($text)) {
-            if(!empty($text)) {
-                // Verhindert XSS
-                htmlspecialchars($text);
-            } else {
-                header('/reply/create?error=Bitte lasse die Eingabe nicht leer'); // Mit Fehler returnen, dass Werte leer waren
-            }
-        } else {
-            header('/reply/create?error=Bitte gib einen Text ein'); // Mit Fehler returnen, dass Werte fehlen
-        }
-
-        $query = "INSERT INTO $this->tableName ($user_id, $text, $comment_id) VALUES (?, ?, ?)";
-
+        $query = "INSERT INTO {$this->tableName} (user_id, text, comment_id, is_approved) VALUES (?, ?, ?, ?)";
         $statement = ConnectionHandler::getConnection()->prepare($query);
-        $statement->bind_param('isi', $user_id, $text, $comment_id);
+        $approved = 1;
+        $statement->bind_param('isii', $user_id, $text, $comment_id, $approved);
 
-        if (!$statement->execute())
-        {
+        if (!$statement->execute()) {
             throw new Exception($statement->error);
         }
-
-        return $statement->insert_id;
+        // Weiterleiten auf neu Post
+        header('Location: /post/details/?id=' . $post_id);
     }
 
     /**
