@@ -4,6 +4,11 @@
             window.location.href = "/post/delete/?id=<?= $post->id ?>";
         } else return
     }
+    confirmCommentDelete = (comment_id) => {
+        if (confirm('Möchten Sie wirklich den Kommentar löschen?')) {
+            window.location.href = `/post/delete_comment/?id=${comment_id}`;
+        } else return
+    }
 </script>
 
 <article class="mb-5">
@@ -22,10 +27,8 @@
                 <i><?= $created_at ?></i></p>
             <?php if ($is_post_owner): ?>
                 <div class="btn-group">
-                    <a href="/post/edit/?id=<?= $post->id ?>">
-                        <button class="btn btn-warning">Editieren</button>
-                    </a>
-                    <button class="btn btn-danger" onclick="confirmDelete()">Löschen</button>
+                    <a class="btn btn-sm btn-outline-warning" href="/post/edit/?id=<?= $post->id ?>">Editieren </a>
+                    <button class="btn btn-sm btn-outline-danger" onclick="confirmDelete()">Löschen</button>
                 </div>
                 <hr>
             <?php endif; ?>
@@ -52,6 +55,15 @@
         <div class="col-12 col-sm-8">
             <h2 class="h4">Kommentare</h2>
             <hr>
+            <?php if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['userid'])): ?>
+                <form class="w-100 mb-3" action="/post/doCreateComment" method="post">
+                    <textarea id="kommentar-text" name="text" rows="3" class="form-control" required></textarea>
+                    <input type="hidden" name="post_id" value="<?= $post->id ?>">
+                    <div class="pt-2">
+                        <button type="submit" class="btn btn-primary">Kommentieren</button>
+                    </div>
+                </form>
+            <?php endif; ?>
             <?php
             foreach ($comments as $comment):?>
                 <?php
@@ -64,16 +76,39 @@
                 $userRepository = new \App\Repository\UserRepository();
                 $full_name = $userRepository->readById($comment_user_id)->first_name . " " . $userRepository->readById($comment_user_id)->last_name;
                 ?>
-
                 <p><?= $comment->text ?></p>
-                <p><?= "<strong>$full_name</strong> <i>$created_at</i>" ?></p>
+                <div class="d-flex align-items-center justify-content-between">
+                    <p class="m-0"><?= "<strong>$full_name</strong> <i>$created_at</i>" ?></p>
 
+
+                    <?php
+
+                    // Prüfe ob den Benutzer der Kommentarautor ist.
+                    $is_comment_owner = false;
+                    if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
+                        if ($_SESSION['userid'] == $comment->user_id) {
+                            $is_comment_owner = true;
+                        }
+                    }
+                    ?>
+                    <div class="btn-group">
+                    <?php
+                    if ($is_comment_owner): ?>
+                        <a class="btn btn-sm btn-outline-warning" href="/post/editComment/?comment_id=<?= $comment->id ?>&post_id=<?= $post->id ?>">Editieren </a>
+                        <!--<button class="btn btn-sm btn-outline-warning">Editieren</button>-->
+                        <button class="btn btn-sm btn-outline-danger" onclick="confirmCommentDelete(<?= $comment->id ?>)">Löschen</button>
+                    <?php endif; ?>
+                        <button class="btn btn-sm btn-outline-secondary">Antworten</button>
+                    </div>
+
+                </div>
                 <?php
                 $replyRepository = new \App\Repository\ReplyRepository();
                 $replies = $replyRepository->getAllRepliesForCommentID($comment->id);
                 ?>
                 <?php if (count($replies) == 0): ?>
                     <hr>
+
                 <?php endif; ?>
                 <div>
 
