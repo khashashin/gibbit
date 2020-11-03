@@ -8,6 +8,14 @@
 
 <article class="d-flex align-items-center flex-column">
 
+    <!-- Falls vorhanden: Fehler anzeigen -->
+    <?php if(isset($_GET['error'])):  ?>
+        <div class="error">
+            <h2>Fehler:</h2>
+            <p><?= htmlspecialchars($_GET['error']); ?></p>
+        </div>
+    <?php endif; ?>
+
     <h1 class="h3"><?= $_SESSION['username'] ?></h1>
 
 
@@ -45,18 +53,35 @@
         ?>
 
         <div class="col-6 d-none d-sm-block">
-            <div class="card w-100 bg-light">
+            <div class="card w-100 bg-light manage-account">
                 <div class="card-header">
                     Account verwalten
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
+                        <b>Benutername zurücksetzen</b>
                         <form name="updateCredentials" action="/user/updateUsername" class="updateCredentials" method="post">
                             <label class="w-50" for="username">Benutzername<br>
                                 <input class="w-100" value="<?= $username ?>" type="text" name="username">
                             </label>
                             <input name="userid" type="hidden" value="<?= $_SESSION['userid']; ?>">
-                            <button class="btn btn-success profile-submit" type="submit">Änderungen speichern</button>
+                            <button class="btn btn-success profile-submit w-50" type="submit">Änderungen speichern</button>
+                        </form>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Passwort zurücksetzen</b>
+                        <form name="resetPassword" action="/user/resetPassword/" class="resetPassword" method="post">
+                            <label class="w-50" for="currentPW">Aktuelles Passwort<br>
+                                <input class="w-100" type="password" name="currentPW">
+                            </label>
+                            <label class="w-50" for="newPW">Neues Passwort<br>
+                                <input class="w-100" type="password" name="newPW">
+                            </label>
+                            <label class="w-50" for="repeatedPW">Neues Passwort wiederholen<br>
+                                <input class="w-100" type="password" name="repeatedPW">
+                            </label>
+                            <input name="userid" type="hidden" value="<?= $_SESSION['userid']; ?>">
+                            <button class="btn btn-success profile-submit w-50" type="submit">Passwort zurücksetzen</button>
                         </form>
                     </li>
                     <li class="list-group-item"><a href="/user/deleteUser" onclick="return confirm('Möchtest du deinen Account wirklich löschen?')">Account löschen</a></li>
