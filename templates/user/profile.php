@@ -72,13 +72,13 @@
                         <b>Passwort zurücksetzen</b>
                         <form name="resetPassword" action="/user/resetPassword/" class="resetPassword" method="post">
                             <label class="w-50" for="currentPW">Aktuelles Passwort<br>
-                                <input class="w-100" type="password" name="currentPW">
+                                <input class="w-100" type="password" autocomplete="off" name="currentPW">
                             </label>
                             <label class="w-50" for="newPW">Neues Passwort<br>
-                                <input class="w-100" type="password" name="newPW">
+                                <input class="w-100" type="password" autocomplete="off" name="newPW">
                             </label>
                             <label class="w-50" for="repeatedPW">Neues Passwort wiederholen<br>
-                                <input class="w-100" type="password" name="repeatedPW">
+                                <input class="w-100" type="password" autocomplete="off" name="repeatedPW">
                             </label>
                             <input name="userid" type="hidden" value="<?= $_SESSION['userid']; ?>">
                             <button class="btn btn-success profile-submit w-50" type="submit">Passwort zurücksetzen</button>

@@ -54,45 +54,6 @@ class CommentRepository extends Repository
             }
 
             return $statement->insert_id;
-
-
-
-    }
-
-    /**
-     * Aendert einen Kommentar mit den gegebenen Werten.
-     *.
-     *
-     * @param $user_id Wert für die Spalte user_id
-     * @param $text Wert für die Spalte text
-     * @param $id Wert für die Spalte id
-     *
-     * @throws Exception falls das Ausführen des Statements fehlschlägt
-     */
-    public function change($text, $id)
-    {
-        if(isset($_SESSION['isLoggedIn']))
-        {
-            if(isset($text)) {
-                if(!empty($text)) {
-                    // Verhindert XSS
-                    htmlspecialchars($text);
-                } else {
-                    header('/comment/change?error=Du kannst keinen Leeren Kommentar posten'); // Mit Fehler returnen, dass Werte leer waren
-                }
-            } else {
-                header('/comment/change?error=Bitte gib einen Text ein'); // Mit Fehler returnen, dass Werte fehlen
-            }
-
-            $query = "UPDATE $this->tableName SET text = $text WHERE id = $id";
-
-            $statement = ConnectionHandler::getConnection()->prepare($query);
-            $statement->bind_param('si', $text, $id);
-        }
-        else
-        {
-            echo "Permission denied";
-        }
     }
 
     /**
