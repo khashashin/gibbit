@@ -53,8 +53,8 @@ class PostRepository extends Repository
         if (!$statement->execute()) {
             throw new Exception($statement->error);
         }
-        // Weiterleiten auf geupdateten Post -- NEEDS FIX
-        header('Location: /post/details/?id=' . $statement->insert_id);
+        // Weiterleiten auf geupdateten Post
+        header('Location: /post/details/?id=' . $post_id);
 
     }
 
@@ -66,7 +66,11 @@ class PostRepository extends Repository
      * @throws Exception falls das Ausführen des Statements fehlschlägt
      *
      */
-    public function getAllPostsByUser(int $user_id) {
+    public function getAllPostsByUser($user_id) {
+
+        if(empty($user_id)) {
+            return false;
+        }
 
         $query = "SELECT * FROM {$this->tableName} WHERE user_id=?";
         $statement = ConnectionHandler::getConnection()->prepare($query);

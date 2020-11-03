@@ -1,7 +1,12 @@
-<script type="application/javascript">
+<script>
     confirmDelete = () => {
         if (confirm('Möchten Sie wirklich den Post löschen?')) {
             window.location.href = "/post/delete/?id=<?= $post->id ?>";
+        } else return
+    }
+    confirmCommentDelete = (comment_id) => {
+        if (confirm('Möchten Sie wirklich den Kommentar löschen?')) {
+            window.location.href = `/post/delete_comment/?id=${comment_id}`;
         } else return
     }
 </script>
@@ -22,10 +27,8 @@
                 <i><?= $created_at ?></i></p>
             <?php if ($is_post_owner): ?>
                 <div class="btn-group">
-                    <a href="/post/edit/?id=<?= $post->id ?>">
-                        <button class="btn btn-warning">Editieren</button>
-                    </a>
-                    <button class="btn btn-danger" onclick="confirmDelete()">Löschen</button>
+                    <a class="btn btn-sm btn-outline-warning" href="/post/edit/?id=<?= $post->id ?>">Editieren </a>
+                    <button class="btn btn-sm btn-outline-danger" onclick="confirmDelete()">Löschen</button>
                 </div>
                 <hr>
             <?php endif; ?>
@@ -37,11 +40,10 @@
                 </div>
                 <ul class="list-group list-group-flush">
                     <?php
+                    /* Temporär wird statische posts verwendet TODO: Get posts by similar tags (!not implemented yet)*/
                     foreach ($similar_posts as $similar_post): ?>
-                        <!-- Temporär wird statische posts verwendet
-                             TODO: Get posts by similar tags (!not implemented yet)-->
-                        <li class="list-group-item"><a
-                                    href="/post/details/?id=<?= $similar_post->id ?>"><?= $similar_post->title; ?></a>
+                        <li class="list-group-item">
+                            <a href="/post/details/?id=<?= $similar_post->id ?>"><?= $similar_post->title; ?></a>
                         </li>
                     <?php endforeach; ?>
                 </ul>
@@ -49,9 +51,18 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-12 col-sm-8">
+        <div class="col-12 col-sm-8 mb-4">
             <h2 class="h4">Kommentare</h2>
             <hr>
+            <?php if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['userid'])): ?>
+                <form class="w-100 mb-3" action="/post/doCreateComment" method="post">
+                    <textarea id="kommentar-text" name="text" rows="3" class="form-control" required></textarea>
+                    <input type="hidden" name="post_id" value="<?= $post->id ?>">
+                    <div class="pt-2">
+                        <button type="submit" class="btn btn-primary">Kommentieren</button>
+                    </div>
+                </form>
+            <?php endif; ?>
             <?php
             foreach ($comments as $comment):?>
                 <?php
@@ -64,16 +75,38 @@
                 $userRepository = new \App\Repository\UserRepository();
                 $full_name = $userRepository->readById($comment_user_id)->first_name . " " . $userRepository->readById($comment_user_id)->last_name;
                 ?>
-
                 <p><?= $comment->text ?></p>
-                <p><?= "<strong>$full_name</strong> <i>$created_at</i>" ?></p>
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <p class="m-0"><?= "<strong>$full_name</strong> <i>$created_at</i>" ?></p>
 
+
+                    <?php
+
+                    // Prüfe ob den Benutzer der Kommentarautor ist.
+                    $is_comment_owner = false;
+                    if (isset($_SESSION['isLoggedIn']) && !empty($_SESSION['isLoggedIn'])) {
+                        if ($_SESSION['userid'] == $comment->user_id) {
+                            $is_comment_owner = true;
+                        }
+                    }
+                    ?>
+                    <div class="btn-group">
+                    <?php
+                    if ($is_comment_owner): ?>
+                        <a class="btn btn-sm btn-outline-warning" href="/post/editComment/?comment_id=<?= $comment->id ?>&post_id=<?= $post->id ?>">Editieren </a>
+                        <!--<button class="btn btn-sm btn-outline-warning">Editieren</button>-->
+                        <button class="btn btn-sm btn-outline-danger" onclick="confirmCommentDelete(<?= $comment->id ?>)">Löschen</button>
+                    <?php endif; ?>
+                    </div>
+
+                </div>
                 <?php
                 $replyRepository = new \App\Repository\ReplyRepository();
                 $replies = $replyRepository->getAllRepliesForCommentID($comment->id);
                 ?>
                 <?php if (count($replies) == 0): ?>
                     <hr>
+
                 <?php endif; ?>
                 <div>
 
@@ -93,7 +126,19 @@
                             <hr style="border: 1px dashed rgba(0,0,0,0.5)">
                         </div>
                     <?php endforeach; ?>
-
+                    <div>
+                        <form action="/post/doCreateReply" method="post" class="ml-5 needs-validation" novalidate>
+                            <div class="form-group">
+                                <label for="reply-text">Antwort</label>
+                                <textarea id="reply-text" name="text" rows="2" class="form-control" required></textarea>
+                            </div>
+                            <input type="hidden" name="post_id" value="<?= $comment->post_id ?>">
+                            <input type="hidden" name="comment_id" value="<?= $comment->id ?>">
+                            <div class="text-right">
+                                <button type="submit" class="btn btn-primary btn-sm">Antworten</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             <?php endforeach; ?>
 
